@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 
 const productCategories = ['Than tre', 'Tấm PVC', 'Lam sóng', 'Nhựa Nano']
+const phoneNumber = '0900123456'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
 	component: RootLayout,
@@ -103,6 +104,39 @@ function RootLayout() {
 			<main className="mx-auto w-full max-w-6xl px-4 py-8">
 				<Outlet />
 			</main>
+			<div className="fixed bottom-5 right-4 z-20 flex flex-col gap-3">
+				<a
+					href={`tel:${phoneNumber}`}
+					aria-label="Điện thoại"
+					title="Điện thoại"
+					className="group flex h-14 w-14 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105"
+				>
+					<span className="absolute h-14 w-14 rounded-full bg-amber-400/20 animate-pulse" />
+					<img src="/phone-logo.png" alt="Điện thoại" className="relative z-10 h-7 w-7 object-contain" />
+				</a>
+				<a
+					href={`https://zalo.me/${phoneNumber}`}
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Liên hệ Zalo"
+					title="Liên hệ Zalo"
+					className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105"
+				>
+					<span className="absolute h-14 w-14 rounded-full bg-sky-400/20 animate-pulse [animation-delay:150ms]" />
+					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-8 w-8 object-contain" />
+				</a>
+				<a
+					href="https://facebook.com/"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Facebook"
+					title="Facebook"
+					className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105"
+				>
+					<span className="absolute h-14 w-14 rounded-full bg-blue-400/20 animate-pulse [animation-delay:300ms]" />
+					<img src="/facebook-logo.png" alt="Facebook" className="relative z-10 h-8 w-8 object-contain" />
+				</a>
+			</div>
 		</div>
 	)
 }
