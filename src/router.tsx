@@ -1,6 +1,6 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
-
+// ok
 export const router = createTanStackRouter({
   routeTree,
   defaultPreload: 'intent',
