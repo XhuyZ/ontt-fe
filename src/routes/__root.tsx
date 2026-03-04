@@ -2,8 +2,10 @@ import { Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router
 import { useState } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 import { CATEGORY_MAP } from '../hooks/useProducts'
+import { PROJECT_CATEGORY_MAP } from '../hooks/useProjects'
 
 const productCategories = Object.keys(CATEGORY_MAP)
+const projectCategories = Object.keys(PROJECT_CATEGORY_MAP)
 const phoneNumber = '0900123456'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -14,6 +16,7 @@ function RootLayout() {
 	const navLinkClass = 'px-1 py-1 text-sm font-medium text-amber-900'
 	const navLinkActiveClass = 'border-b-2 border-amber-700 text-amber-700'
 	const [isProductMenuOpen, setIsProductMenuOpen] = useState(false)
+	const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false)
 
 	return (
 		<div className="min-h-screen bg-amber-50/40">
@@ -85,13 +88,64 @@ function RootLayout() {
 								))}
 							</div>
 						</div>
-						<Link
-							to="/cong-trinh-da-thi-cong"
-							className={navLinkClass}
-							activeProps={{ className: `${navLinkClass} ${navLinkActiveClass}` }}
-						>
-							Công trình đã thi công
-						</Link>
+						<div className="relative">
+							<button
+								type="button"
+								onClick={() => setIsProjectMenuOpen((prev) => !prev)}
+								className={`${navLinkClass} flex items-center gap-1`}
+								aria-expanded={isProjectMenuOpen}
+								aria-controls="project-menu"
+							>
+								<span>Công trình đã thi công</span>
+								<svg
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									className={`h-4 w-4 transition-transform duration-200 ${isProjectMenuOpen ? 'rotate-180' : ''}`}
+									aria-hidden="true"
+								>
+									<path
+										fillRule="evenodd"
+										d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+										clipRule="evenodd"
+									/>
+								</svg>
+							</button>
+							<div
+								id="project-menu"
+								className={`absolute left-0 top-full mt-2 min-w-48 origin-top rounded-lg border border-amber-200 bg-white p-2 shadow-md transition-all duration-200 ${
+									isProjectMenuOpen
+										? 'pointer-events-auto translate-y-0 scale-100 opacity-100'
+										: 'pointer-events-none -translate-y-1 scale-95 opacity-0'
+								}`}
+							>
+								<Link
+									to="/cong-trinh-da-thi-cong"
+									search={{ categoryId: undefined, categoryName: undefined }}
+									onClick={() => setIsProjectMenuOpen(false)}
+									className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+									activeProps={{
+										className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700',
+									}}
+								>
+									Tất cả
+								</Link>
+								{projectCategories.map((name) => (
+									<Link
+										key={name}
+										to="/cong-trinh-da-thi-cong"
+										search={{ categoryId: PROJECT_CATEGORY_MAP[name], categoryName: name }}
+										onClick={() => setIsProjectMenuOpen(false)}
+										className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 last:mb-0"
+										activeProps={{
+											className:
+												'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700 last:mb-0',
+										}}
+									>
+										{name}
+									</Link>
+								))}
+							</div>
+						</div>
 						<Link
 							to="/ve-chung-toi"
 							className={navLinkClass}
