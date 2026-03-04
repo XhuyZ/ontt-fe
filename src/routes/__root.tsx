@@ -1,8 +1,9 @@
 import { Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { useState } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
+import { CATEGORY_MAP } from '../hooks/useProducts'
 
-const productCategories = ['Than tre', 'Tấm PVC', 'Lam sóng', 'Nhựa Nano']
+const productCategories = Object.keys(CATEGORY_MAP)
 const phoneNumber = '0900123456'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -58,7 +59,7 @@ function RootLayout() {
 							>
 								<Link
 									to="/san-pham"
-									search={{ category: undefined }}
+									search={{ categoryId: undefined, categoryName: undefined }}
 									onClick={() => setIsProductMenuOpen(false)}
 									className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
 									activeProps={{
@@ -67,11 +68,11 @@ function RootLayout() {
 								>
 									Tất cả
 								</Link>
-								{productCategories.map((category) => (
+								{productCategories.map((name) => (
 									<Link
-										key={category}
+										key={name}
 										to="/san-pham"
-										search={{ category }}
+										search={{ categoryId: CATEGORY_MAP[name], categoryName: name }}
 										onClick={() => setIsProductMenuOpen(false)}
 										className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 last:mb-0"
 										activeProps={{
@@ -79,7 +80,7 @@ function RootLayout() {
 												'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700 last:mb-0',
 										}}
 									>
-										{category}
+										{name}
 									</Link>
 								))}
 							</div>
