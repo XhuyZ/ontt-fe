@@ -2,7 +2,12 @@
 
 @layer base {
   html {
-    font-size: 125%;
+    font-size: 100%;
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 125%;
+    }
   }
   body {
     @apply m-0 min-h-screen bg-slate-50 text-slate-900 antialiased;
