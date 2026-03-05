@@ -13,3 +13,13 @@
     @apply m-0 min-h-screen bg-slate-50 text-slate-900 antialiased;
   }
 }
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
