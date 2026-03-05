@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useProducts } from '../hooks/useProducts'
 import { useProjects } from '../hooks/useProjects'
+import { Lightbox } from '../components/Lightbox'
 import type { Product } from '../hooks/useProducts'
 import type { Project } from '../hooks/useProjects'
 
@@ -92,50 +93,50 @@ function SliderSkeleton() {
 /* ------------------------------------------------------------------ */
 /*  Cards                                                              */
 /* ------------------------------------------------------------------ */
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, onViewImage }: { product: Product; onViewImage: (src: string, alt: string) => void }) {
   const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
   return (
     <article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+      <button type="button" className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100" onClick={() => onViewImage(imgUrl, product.name)}>
         <img src={imgUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
         <span className="absolute left-2 top-2 rounded-full bg-amber-600/90 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
           {product.category.name}
         </span>
-      </div>
+      </button>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 sm:text-sm">{product.name}</h3>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
           <a href="tel:0347916199" className="flex-1 rounded-lg bg-amber-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-amber-700 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
-          <Link to="/san-pham" search={{ categoryId: product.category.id, categoryName: product.category.name }} className="flex-1 rounded-lg border border-amber-600 py-1.5 text-center text-[10px] font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs">
+          <button type="button" onClick={() => onViewImage(imgUrl, product.name)} className="flex-1 rounded-lg border border-amber-600 py-1.5 text-center text-[10px] font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs">
             Chi tiết
-          </Link>
+          </button>
         </div>
       </div>
     </article>
   )
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, onViewImage }: { project: Project; onViewImage: (src: string, alt: string) => void }) {
   const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
   return (
     <article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+      <button type="button" className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100" onClick={() => onViewImage(imgUrl, project.name)}>
         <img src={imgUrl} alt={project.name} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
         <span className="absolute left-2 top-2 rounded-full bg-amber-600/90 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
           {project.projectCategory.name}
         </span>
-      </div>
+      </button>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 sm:text-sm">{project.name}</h3>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
           <a href="tel:0347916199" className="flex-1 rounded-lg bg-amber-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-amber-700 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
-          <Link to="/cong-trinh-da-thi-cong" search={{ categoryId: project.projectCategory.id, categoryName: project.projectCategory.name }} className="flex-1 rounded-lg border border-amber-600 py-1.5 text-center text-[10px] font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs">
+          <button type="button" onClick={() => onViewImage(imgUrl, project.name)} className="flex-1 rounded-lg border border-amber-600 py-1.5 text-center text-[10px] font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs">
             Chi tiết
-          </Link>
+          </button>
         </div>
       </div>
     </article>
@@ -148,6 +149,7 @@ function ProjectCard({ project }: { project: Project }) {
 function HomePage() {
   const [heroIdx, setHeroIdx] = useState(0)
   const [heroReady, setHeroReady] = useState(false)
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
   const productSlider = useSlider()
   const projectSlider = useSlider()
   const productsReveal = useReveal()
@@ -266,7 +268,7 @@ function HomePage() {
               className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
             >
               {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p.id} product={p} onViewImage={(src, alt) => setLightbox({ src, alt })} />
               ))}
             </div>
           </div>
@@ -307,7 +309,7 @@ function HomePage() {
               className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
             >
               {projects.map((p) => (
-                <ProjectCard key={p.id} project={p} />
+                <ProjectCard key={p.id} project={p} onViewImage={(src, alt) => setLightbox({ src, alt })} />
               ))}
             </div>
           </div>
@@ -315,6 +317,8 @@ function HomePage() {
           <p className="py-8 text-center text-sm text-slate-400">Chưa có công trình.</p>
         )}
       </section>
+
+      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </div>
   )
 }

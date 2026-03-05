@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useProducts, CATEGORY_MAP } from '../hooks/useProducts'
+import { Lightbox } from '../components/Lightbox'
 import type { Product } from '../hooks/useProducts'
 
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
@@ -28,7 +30,7 @@ function SkeletonCard() {
   )
 }
 
-function ProductCard({ product, index }: { product: Product; index: number }) {
+function ProductCard({ product, index, onViewImage }: { product: Product; index: number; onViewImage: (src: string, alt: string) => void }) {
   const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 
   return (
@@ -36,7 +38,11 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
       className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+      <button
+        type="button"
+        className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100"
+        onClick={() => onViewImage(imgUrl, product.name)}
+      >
         <img
           src={imgUrl}
           alt={product.name}
@@ -46,7 +52,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         <span className="absolute left-2 top-2 rounded-full bg-amber-600/90 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
           {product.category.name}
         </span>
-      </div>
+      </button>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">{product.name}</h3>
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
@@ -56,13 +62,13 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           >
             Liên hệ
           </a>
-          <Link
-            to="/san-pham"
-            search={{ categoryId: product.category.id, categoryName: product.category.name }}
+          <button
+            type="button"
+            onClick={() => onViewImage(imgUrl, product.name)}
             className="flex-1 rounded-lg border border-amber-600 px-2 py-2 text-center text-xs font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Xem chi tiết
-          </Link>
+          </button>
         </div>
       </div>
     </article>
@@ -72,6 +78,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 function ProductsPage() {
   const { categoryId, categoryName } = Route.useSearch()
   const { data: products, isLoading, isError, error } = useProducts(categoryId)
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
 
   const categoryEntries = Object.entries(CATEGORY_MAP)
 
@@ -136,10 +143,17 @@ function ProductsPage() {
       {products && products.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {products.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+              onViewImage={(src, alt) => setLightbox({ src, alt })}
+            />
           ))}
         </div>
       )}
+
+      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </section>
   )
 }
