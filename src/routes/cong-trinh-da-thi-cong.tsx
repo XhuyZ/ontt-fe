@@ -14,11 +14,30 @@ export const Route = createFileRoute('/cong-trinh-da-thi-cong')({
   component: ProjectsPage,
 })
 
-function ProjectCard({ project, onViewImage }: { project: Project; onViewImage: (src: string, alt: string) => void }) {
+function SkeletonCard() {
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
+      <div className="skeleton aspect-[4/3] w-full" />
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <div className="skeleton h-4 w-3/4 rounded" />
+        <div className="skeleton mt-2 h-3 w-1/2 rounded" />
+        <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
+          <div className="skeleton h-8 flex-1 rounded-lg sm:h-10" />
+          <div className="skeleton h-8 flex-1 rounded-lg sm:h-10" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProjectCard({ project, index, onViewImage }: { project: Project; index: number; onViewImage: (src: string, alt: string) => void }) {
   const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <article
+      className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
       <button
         type="button"
         className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100"
@@ -101,8 +120,10 @@ function ProjectsPage() {
       </div>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-16 sm:py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-200 border-t-amber-600 sm:h-10 sm:w-10" />
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
       )}
 
@@ -121,10 +142,11 @@ function ProjectsPage() {
 
       {projects && projects.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
-          {projects.map((project) => (
+          {projects.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}
+              index={i}
               onViewImage={(src, alt) => setLightbox({ src, alt })}
             />
           ))}
