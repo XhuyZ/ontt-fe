@@ -6,7 +6,7 @@ import { PROJECT_CATEGORY_MAP } from '../hooks/useProjects'
 
 const productCategories = Object.keys(CATEGORY_MAP)
 const projectCategories = Object.keys(PROJECT_CATEGORY_MAP)
-const phoneNumber = '0900123456'
+const phoneNumber = '0347916199'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
 	component: RootLayout,
@@ -220,7 +220,7 @@ function RootLayout() {
 					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-7 w-7 object-contain md:h-8 md:w-8" />
 				</a>
 				<a
-					href="https://facebook.com/"
+					href="https://www.facebook.com/tna.tek03"
 					target="_blank"
 					rel="noreferrer"
 					aria-label="Facebook"

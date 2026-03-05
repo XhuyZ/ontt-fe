@@ -16,7 +16,7 @@ function ProjectCard({ project }: { project: Project }) {
   const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
         <img
           src={imgUrl}
@@ -32,7 +32,7 @@ function ProjectCard({ project }: { project: Project }) {
         <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">{project.name}</h3>
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <a
-            href="tel:0900123456"
+            href="tel:0347916199"
             className="flex-1 rounded-lg bg-amber-600 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-amber-700 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Liên hệ

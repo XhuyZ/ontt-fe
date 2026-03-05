@@ -12,11 +12,30 @@ export const Route = createFileRoute('/san-pham')({
   component: ProductsPage,
 })
 
-function ProductCard({ product }: { product: Product }) {
+function SkeletonCard() {
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
+      <div className="skeleton aspect-[4/3] w-full" />
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <div className="skeleton h-4 w-3/4 rounded" />
+        <div className="skeleton mt-2 h-3 w-1/2 rounded" />
+        <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
+          <div className="skeleton h-8 flex-1 rounded-lg sm:h-10" />
+          <div className="skeleton h-8 flex-1 rounded-lg sm:h-10" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProductCard({ product, index }: { product: Product; index: number }) {
   const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <article
+      className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
         <img
           src={imgUrl}
@@ -32,10 +51,10 @@ function ProductCard({ product }: { product: Product }) {
         <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">{product.name}</h3>
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <a
-            href="tel:0900123456"
+            href="tel:0347916199"
             className="flex-1 rounded-lg bg-amber-600 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-amber-700 sm:px-3 sm:py-2.5 sm:text-sm"
           >
-            Mua ngay
+            Liên hệ
           </a>
           <Link
             to="/san-pham"
@@ -94,8 +113,10 @@ function ProductsPage() {
       </div>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-16 sm:py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-200 border-t-amber-600 sm:h-10 sm:w-10" />
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
       )}
 
@@ -114,8 +135,8 @@ function ProductsPage() {
 
       {products && products.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, i) => (
+            <ProductCard key={product.id} product={product} index={i} />
           ))}
         </div>
       )}
