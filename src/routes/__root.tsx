@@ -17,7 +17,17 @@ function RootLayout() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 	const [isProductMenuOpen, setIsProductMenuOpen] = useState(false)
 	const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false)
+	const [showScrollTop, setShowScrollTop] = useState(false)
 	const navRef = useRef<HTMLElement>(null)
+
+	useEffect(() => {
+		function handleScroll() {
+			setShowScrollTop(window.scrollY > 300)
+		}
+		window.addEventListener('scroll', handleScroll, { passive: true })
+		handleScroll()
+		return () => window.removeEventListener('scroll', handleScroll)
+	}, [])
 
 	useEffect(() => {
 		function handleClickOutside(e: MouseEvent) {
@@ -86,12 +96,12 @@ function RootLayout() {
 									<path fillRule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clipRule="evenodd" />
 								</svg>
 							</button>
-							<div className={`absolute left-0 top-full mt-2 min-w-48 origin-top rounded-lg border border-stone-200 bg-white p-2 shadow-md transition-all duration-200 ${isProductMenuOpen ? 'pointer-events-auto translate-y-0 scale-100 opacity-100' : 'pointer-events-none -translate-y-1 scale-95 opacity-0'}`}>
-								<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-900 transition-colors hover:bg-stone-100" activeProps={{ className: 'mb-1 block rounded-md border border-stone-600 bg-stone-100 px-3 py-2 text-sm font-medium text-stone-800' }}>
+							<div className={`absolute left-0 top-full mt-2 min-w-48 origin-top rounded-lg border border-amber-200 bg-white p-2 shadow-md transition-all duration-200 ${isProductMenuOpen ? 'pointer-events-auto translate-y-0 scale-100 opacity-100' : 'pointer-events-none -translate-y-1 scale-95 opacity-0'}`}>
+								<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-100" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700' }}>
 									Tất cả
 								</Link>
 								{productCategories.map((name) => (
-									<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 transition-colors hover:bg-stone-50 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-stone-600 bg-stone-100 px-3 py-2 text-sm font-medium text-stone-800 last:mb-0' }}>
+									<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-50 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700 last:mb-0' }}>
 										{name}
 									</Link>
 								))}
@@ -160,12 +170,12 @@ function RootLayout() {
 								</svg>
 							</button>
 							<div className={`overflow-hidden transition-all duration-200 ${isProductMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-								<div className="ml-3 space-y-1 border-l-2 border-stone-200 pl-3 pt-1">
-									<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="block rounded-md px-3 py-2 text-sm text-stone-900 hover:bg-stone-100/60">
+								<div className="ml-3 space-y-1 border-l-2 border-amber-200 pl-3 pt-1">
+									<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="block rounded-md px-3 py-2 text-sm text-amber-900 hover:bg-amber-100/60">
 										Tất cả
 									</Link>
 									{productCategories.map((name) => (
-										<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="block rounded-md px-3 py-2 text-sm text-stone-900 hover:bg-stone-100/60">
+										<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="block rounded-md px-3 py-2 text-sm text-amber-900 hover:bg-amber-100/60">
 											{name}
 										</Link>
 									))}
@@ -232,6 +242,19 @@ function RootLayout() {
 					</p>
 				</div>
 			</footer>
+
+			{/* Scroll to top - bottom left */}
+			<button
+				type="button"
+				onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+				aria-label="Cuộn lên đầu trang"
+				title="Cuộn lên đầu trang"
+				className={`fixed bottom-4 left-3 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 md:bottom-5 md:left-4 md:h-14 md:w-14 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'}`}
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-5 w-5 text-amber-900 md:h-6 md:w-6">
+					<path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+				</svg>
+			</button>
 
 			<div className="fixed bottom-4 right-3 z-20 flex flex-col gap-2.5 md:bottom-5 md:right-4 md:gap-3">
 				<a

@@ -162,7 +162,7 @@ function ProjectDetailPage() {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-4 lg:min-w-[200px] lg:pl-4">
+          <div className="flex flex-col gap-4 lg:min-w-[200px] lg:pl-6 lg:pr-20">
             <div>
               <span className="rounded-full bg-stone-600 px-3 py-1 text-xs font-medium text-white">
                 {project.projectCategory.name}
