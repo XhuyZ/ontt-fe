@@ -9,18 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SanPhamRouteImport } from './routes/san-pham'
 import { Route as CongTrinhDaThiCongRouteImport } from './routes/cong-trinh-da-thi-cong'
+import { Route as SanPhamRouteRouteImport } from './routes/san-pham/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SanPhamIndexRouteImport } from './routes/san-pham/index'
+import { Route as SanPhamProductIdRouteImport } from './routes/san-pham/$productId'
 
-const SanPhamRoute = SanPhamRouteImport.update({
-  id: '/san-pham',
-  path: '/san-pham',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CongTrinhDaThiCongRoute = CongTrinhDaThiCongRouteImport.update({
   id: '/cong-trinh-da-thi-cong',
   path: '/cong-trinh-da-thi-cong',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SanPhamRouteRoute = SanPhamRouteRouteImport.update({
+  id: '/san-pham',
+  path: '/san-pham',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,51 +30,77 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SanPhamIndexRoute = SanPhamIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SanPhamRouteRoute,
+} as any)
+const SanPhamProductIdRoute = SanPhamProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => SanPhamRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/san-pham': typeof SanPhamRouteRouteWithChildren
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
-  '/san-pham': typeof SanPhamRoute
+  '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/san-pham/': typeof SanPhamIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
-  '/san-pham': typeof SanPhamRoute
+  '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/san-pham': typeof SanPhamIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/san-pham': typeof SanPhamRouteRouteWithChildren
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
-  '/san-pham': typeof SanPhamRoute
+  '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/san-pham/': typeof SanPhamIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
+  fullPaths:
+    | '/'
+    | '/san-pham'
+    | '/cong-trinh-da-thi-cong'
+    | '/san-pham/$productId'
+    | '/san-pham/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
-  id: '__root__' | '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
+  to: '/' | '/cong-trinh-da-thi-cong' | '/san-pham/$productId' | '/san-pham'
+  id:
+    | '__root__'
+    | '/'
+    | '/san-pham'
+    | '/cong-trinh-da-thi-cong'
+    | '/san-pham/$productId'
+    | '/san-pham/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SanPhamRouteRoute: typeof SanPhamRouteRouteWithChildren
   CongTrinhDaThiCongRoute: typeof CongTrinhDaThiCongRoute
-  SanPhamRoute: typeof SanPhamRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/san-pham': {
-      id: '/san-pham'
-      path: '/san-pham'
-      fullPath: '/san-pham'
-      preLoaderRoute: typeof SanPhamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/cong-trinh-da-thi-cong': {
       id: '/cong-trinh-da-thi-cong'
       path: '/cong-trinh-da-thi-cong'
       fullPath: '/cong-trinh-da-thi-cong'
       preLoaderRoute: typeof CongTrinhDaThiCongRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/san-pham': {
+      id: '/san-pham'
+      path: '/san-pham'
+      fullPath: '/san-pham'
+      preLoaderRoute: typeof SanPhamRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,13 +110,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/san-pham/': {
+      id: '/san-pham/'
+      path: '/'
+      fullPath: '/san-pham/'
+      preLoaderRoute: typeof SanPhamIndexRouteImport
+      parentRoute: typeof SanPhamRouteRoute
+    }
+    '/san-pham/$productId': {
+      id: '/san-pham/$productId'
+      path: '/$productId'
+      fullPath: '/san-pham/$productId'
+      preLoaderRoute: typeof SanPhamProductIdRouteImport
+      parentRoute: typeof SanPhamRouteRoute
+    }
   }
 }
 
+interface SanPhamRouteRouteChildren {
+  SanPhamProductIdRoute: typeof SanPhamProductIdRoute
+  SanPhamIndexRoute: typeof SanPhamIndexRoute
+}
+
+const SanPhamRouteRouteChildren: SanPhamRouteRouteChildren = {
+  SanPhamProductIdRoute: SanPhamProductIdRoute,
+  SanPhamIndexRoute: SanPhamIndexRoute,
+}
+
+const SanPhamRouteRouteWithChildren = SanPhamRouteRoute._addFileChildren(
+  SanPhamRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SanPhamRouteRoute: SanPhamRouteRouteWithChildren,
   CongTrinhDaThiCongRoute: CongTrinhDaThiCongRoute,
-  SanPhamRoute: SanPhamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

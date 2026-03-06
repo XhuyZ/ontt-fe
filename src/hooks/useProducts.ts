@@ -43,9 +43,34 @@ async function fetchProductsByCategory(categoryId: string): Promise<Product[]> {
   return res.json()
 }
 
+async function fetchProductById(productId: string): Promise<Product | null> {
+  try {
+    const res = await fetch(`${API_BASE}/products/${productId}`, { headers: { accept: '*/*' } })
+    if (res.ok) return res.json()
+    // Fallback: fetch all products and find by id (if API has no /products/:id)
+    const all = await fetchAllProducts()
+    return all.find((p) => p.id === productId) ?? null
+  } catch {
+    try {
+      const all = await fetchAllProducts()
+      return all.find((p) => p.id === productId) ?? null
+    } catch {
+      return null
+    }
+  }
+}
+
 export function useProducts(categoryId?: string) {
   return useQuery<Product[]>({
     queryKey: categoryId ? ['products', 'category', categoryId] : ['products'],
     queryFn: () => (categoryId ? fetchProductsByCategory(categoryId) : fetchAllProducts()),
+  })
+}
+
+export function useProduct(productId: string | undefined) {
+  return useQuery<Product | null>({
+    queryKey: ['product', productId],
+    queryFn: () => (productId ? fetchProductById(productId) : Promise.resolve(null)),
+    enabled: !!productId,
   })
 }

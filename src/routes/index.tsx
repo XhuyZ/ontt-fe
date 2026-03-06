@@ -130,9 +130,13 @@ function ProductCard({ product, onViewImage }: { product: Product; onViewImage: 
           <a href="tel:0347916199" className="flex-1 rounded-lg bg-stone-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-stone-700 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
-          <button type="button" onClick={() => onViewImage(imgUrl, product.name)} className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs">
+          <Link
+            to="/san-pham/$productId"
+            params={{ productId: product.id }}
+            className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
+          >
             Chi tiết
-          </button>
+          </Link>
         </div>
       </div>
     </article>
@@ -415,7 +419,7 @@ function HomePage() {
         <div className="mb-6 flex items-center justify-between sm:mb-8">
           <div>
             <h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Công trình đã thi công</h2>
-            <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Các công trình theo phân loại (tối đa 6 công trình/loại)</p>
+            <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Các công trình theo phân loại</p>
           </div>
           <Link
             to="/cong-trinh-da-thi-cong"
