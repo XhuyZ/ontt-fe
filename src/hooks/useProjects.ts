@@ -27,6 +27,8 @@ export const PROJECT_CATEGORY_MAP: Record<string, string> = {
   'Vách TV': '8cfbba31-c74b-4224-b0f2-3b5f8176ce76',
 }
 
+export const PROJECT_CATEGORY_ORDER: string[] = ['Trần', 'Phòng thờ', 'Phòng khách', 'Vách TV']
+
 async function fetchAllProjects(): Promise<Project[]> {
   const res = await fetch(`${API_BASE}/project`, { headers: { accept: '*/*' } })
   if (!res.ok) throw new Error(`Failed to fetch projects: ${res.status}`)

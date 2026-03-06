@@ -9,16 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VeChungToiRouteImport } from './routes/ve-chung-toi'
 import { Route as SanPhamRouteImport } from './routes/san-pham'
 import { Route as CongTrinhDaThiCongRouteImport } from './routes/cong-trinh-da-thi-cong'
 import { Route as IndexRouteImport } from './routes/index'
 
-const VeChungToiRoute = VeChungToiRouteImport.update({
-  id: '/ve-chung-toi',
-  path: '/ve-chung-toi',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SanPhamRoute = SanPhamRouteImport.update({
   id: '/san-pham',
   path: '/san-pham',
@@ -39,50 +33,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
   '/san-pham': typeof SanPhamRoute
-  '/ve-chung-toi': typeof VeChungToiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
   '/san-pham': typeof SanPhamRoute
-  '/ve-chung-toi': typeof VeChungToiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
   '/san-pham': typeof SanPhamRoute
-  '/ve-chung-toi': typeof VeChungToiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cong-trinh-da-thi-cong' | '/san-pham' | '/ve-chung-toi'
+  fullPaths: '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cong-trinh-da-thi-cong' | '/san-pham' | '/ve-chung-toi'
-  id:
-    | '__root__'
-    | '/'
-    | '/cong-trinh-da-thi-cong'
-    | '/san-pham'
-    | '/ve-chung-toi'
+  to: '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
+  id: '__root__' | '/' | '/cong-trinh-da-thi-cong' | '/san-pham'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CongTrinhDaThiCongRoute: typeof CongTrinhDaThiCongRoute
   SanPhamRoute: typeof SanPhamRoute
-  VeChungToiRoute: typeof VeChungToiRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/ve-chung-toi': {
-      id: '/ve-chung-toi'
-      path: '/ve-chung-toi'
-      fullPath: '/ve-chung-toi'
-      preLoaderRoute: typeof VeChungToiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/san-pham': {
       id: '/san-pham'
       path: '/san-pham'
@@ -111,7 +89,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CongTrinhDaThiCongRoute: CongTrinhDaThiCongRoute,
   SanPhamRoute: SanPhamRoute,
-  VeChungToiRoute: VeChungToiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

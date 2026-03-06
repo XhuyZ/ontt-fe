@@ -35,7 +35,7 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
 
   return (
     <article
-      className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-amber-200/60 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <button
@@ -49,7 +49,7 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
-        <span className="absolute left-2 top-2 rounded-full bg-amber-600/90 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
+        <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
           {project.projectCategory.name}
         </span>
       </button>
@@ -58,14 +58,14 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <a
             href="tel:0347916199"
-            className="flex-1 rounded-lg bg-amber-600 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-amber-700 sm:px-3 sm:py-2.5 sm:text-sm"
+            className="flex-1 rounded-lg bg-stone-600 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-stone-700 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Liên hệ
           </a>
           <button
             type="button"
             onClick={() => onViewImage(imgUrl, project.name)}
-            className="flex-1 rounded-lg border border-amber-600 px-2 py-2 text-center text-xs font-medium text-amber-700 transition-colors hover:bg-amber-50 sm:px-3 sm:py-2.5 sm:text-sm"
+            className="flex-1 rounded-lg border border-stone-500 px-2 py-2 text-center text-xs font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Xem chi tiết
           </button>
@@ -96,8 +96,8 @@ function ProjectsPage() {
             search={{ categoryId: undefined, categoryName: undefined }}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm ${
               !categoryId
-                ? 'border-amber-600 bg-amber-600 text-white'
-                : 'border-amber-200 bg-white text-amber-800 hover:bg-amber-50'
+                ? 'border-stone-600 bg-stone-600 text-white'
+                : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
             }`}
           >
             Tất cả
@@ -109,8 +109,8 @@ function ProjectsPage() {
               search={{ categoryId: id, categoryName: name }}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm ${
                 categoryId === id
-                  ? 'border-amber-600 bg-amber-600 text-white'
-                  : 'border-amber-200 bg-white text-amber-800 hover:bg-amber-50'
+                  ? 'border-stone-600 bg-stone-600 text-white'
+                  : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
               }`}
             >
               {name}
