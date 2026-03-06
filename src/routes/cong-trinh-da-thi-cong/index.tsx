@@ -1,12 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
-import { useProjects, PROJECT_CATEGORY_MAP } from '../hooks/useProjects'
-import { Lightbox } from '../components/Lightbox'
-import type { Project } from '../hooks/useProjects'
+import { useProjects, PROJECT_CATEGORY_MAP } from '../../hooks/useProjects'
+import type { Project } from '../../hooks/useProjects'
 
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
 
-export const Route = createFileRoute('/cong-trinh-da-thi-cong')({
+export const Route = createFileRoute('/cong-trinh-da-thi-cong/')({
   validateSearch: (search: Record<string, unknown>) => ({
     categoryId: typeof search.categoryId === 'string' ? search.categoryId : undefined,
     categoryName: typeof search.categoryName === 'string' ? search.categoryName : undefined,
@@ -30,7 +28,7 @@ function SkeletonCard() {
   )
 }
 
-function ProjectCard({ project, index, onViewImage }: { project: Project; index: number; onViewImage: (src: string, alt: string) => void }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 
   return (
@@ -38,10 +36,10 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
       className="animate-card-in group flex h-full flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <button
-        type="button"
-        className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100"
-        onClick={() => onViewImage(imgUrl, project.name)}
+      <Link
+        to="/cong-trinh-da-thi-cong/$projectId"
+        params={{ projectId: project.id }}
+        className="relative block aspect-[4/3] w-full overflow-hidden bg-slate-100"
       >
         <img
           src={imgUrl}
@@ -52,9 +50,13 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
         <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
           {project.projectCategory.name}
         </span>
-      </button>
+      </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">{project.name}</h3>
+        <Link to="/cong-trinh-da-thi-cong/$projectId" params={{ projectId: project.id }}>
+          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 hover:text-stone-600 sm:text-base">
+            {project.name}
+          </h3>
+        </Link>
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <a
             href="tel:0347916199"
@@ -62,13 +64,13 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
           >
             Liên hệ
           </a>
-          <button
-            type="button"
-            onClick={() => onViewImage(imgUrl, project.name)}
+          <Link
+            to="/cong-trinh-da-thi-cong/$projectId"
+            params={{ projectId: project.id }}
             className="flex-1 rounded-lg border border-stone-500 px-2 py-2 text-center text-xs font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Xem chi tiết
-          </button>
+          </Link>
         </div>
       </div>
     </article>
@@ -78,7 +80,6 @@ function ProjectCard({ project, index, onViewImage }: { project: Project; index:
 function ProjectsPage() {
   const { categoryId, categoryName } = Route.useSearch()
   const { data: projects, isLoading, isError, error } = useProjects(categoryId)
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
 
   const categoryEntries = Object.entries(PROJECT_CATEGORY_MAP)
 
@@ -143,17 +144,10 @@ function ProjectsPage() {
       {projects && projects.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {projects.map((project, i) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={i}
-              onViewImage={(src, alt) => setLightbox({ src, alt })}
-            />
+            <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>
       )}
-
-      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </section>
   )
 }

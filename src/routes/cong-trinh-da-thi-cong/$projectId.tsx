@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useRef, useCallback } from 'react'
-import { useProduct, useProducts } from '../../hooks/useProducts'
-import { getProductContent } from '../../data/productContent'
+import { useProject, useProjects } from '../../hooks/useProjects'
 import { Lightbox } from '../../components/Lightbox'
-import type { Product } from '../../hooks/useProducts'
+import type { Project } from '../../hooks/useProjects'
 
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
 
@@ -37,31 +36,31 @@ function SliderArrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => v
   )
 }
 
-export const Route = createFileRoute('/san-pham/$productId')({
-  component: ProductDetailPage,
+export const Route = createFileRoute('/cong-trinh-da-thi-cong/$projectId')({
+  component: ProjectDetailPage,
 })
 
-function ProductCard({ product }: { product: Product }) {
-  const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
+function ProjectCard({ project }: { project: Project }) {
+  const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
   return (
     <article className="group flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
-      <Link to="/san-pham/$productId" params={{ productId: product.id }}>
+      <Link to="/cong-trinh-da-thi-cong/$projectId" params={{ projectId: project.id }}>
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
           <img
             src={imgUrl}
-            alt={product.name}
+            alt={project.name}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
           <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
-            {product.category.name}
+            {project.projectCategory.name}
           </span>
         </div>
       </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <Link to="/san-pham/$productId" params={{ productId: product.id }}>
+        <Link to="/cong-trinh-da-thi-cong/$projectId" params={{ projectId: project.id }}>
           <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 hover:text-stone-600 sm:text-sm">
-            {product.name}
+            {project.name}
           </h3>
         </Link>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
@@ -72,8 +71,8 @@ function ProductCard({ product }: { product: Product }) {
             Liên hệ
           </a>
           <Link
-            to="/san-pham/$productId"
-            params={{ productId: product.id }}
+            to="/cong-trinh-da-thi-cong/$projectId"
+            params={{ projectId: project.id }}
             className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
           >
             Xem chi tiết
@@ -84,21 +83,20 @@ function ProductCard({ product }: { product: Product }) {
   )
 }
 
-function ProductDetailPage() {
-  const { productId } = Route.useParams()
-  const { data: product, isLoading, isError } = useProduct(productId)
-  const categoryId = product?.category?.id
-  const { data: relatedProducts } = useProducts(categoryId)
+function ProjectDetailPage() {
+  const { projectId } = Route.useParams()
+  const { data: project, isLoading, isError } = useProject(projectId)
+  const categoryId = project?.projectCategory?.id
+  const { data: relatedProjects } = useProjects(categoryId)
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
   const [selectedImgIdx, setSelectedImgIdx] = useState(0)
 
-  const images = product?.images ?? []
+  const images = project?.images ?? []
   const displayedImages = images.length > 0 ? images : [{ imgUrl: PLACEHOLDER_IMG, id: '0', url: '' }]
   const selectedImg = displayedImages[selectedImgIdx]?.imgUrl ?? PLACEHOLDER_IMG
 
   const relatedSlider = useSlider()
-  const related = (relatedProducts ?? []).filter((p) => p.id !== productId).slice(0, 6)
-  const content = product ? getProductContent(product.category.name) : null
+  const related = (relatedProjects ?? []).filter((p) => p.id !== projectId).slice(0, 6)
 
   if (isLoading) {
     return (
@@ -112,22 +110,17 @@ function ProductDetailPage() {
               <div className="skeleton h-10 w-32 rounded-lg" />
             </div>
           </div>
-          <div className="mt-8 space-y-2">
-            <div className="skeleton h-4 w-full rounded" />
-            <div className="skeleton h-4 w-full rounded" />
-            <div className="skeleton h-4 w-2/3 rounded" />
-          </div>
         </div>
       </section>
     )
   }
 
-  if (isError || !product) {
+  if (isError || !project) {
     return (
       <section className="rounded-2xl bg-white p-8 text-center shadow-sm sm:p-12">
-        <p className="text-slate-600">Không tìm thấy sản phẩm.</p>
+        <p className="text-slate-600">Không tìm thấy công trình.</p>
         <Link
-          to="/san-pham"
+          to="/cong-trinh-da-thi-cong"
           search={{ categoryId: undefined, categoryName: undefined }}
           className="mt-4 inline-block rounded-lg bg-stone-600 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700"
         >
@@ -147,13 +140,9 @@ function ProductDetailPage() {
               <button
                 type="button"
                 className="h-full w-full cursor-zoom-in"
-                onClick={() => setLightbox({ src: selectedImg, alt: product.name })}
+                onClick={() => setLightbox({ src: selectedImg, alt: project.name })}
               >
-                <img
-                  src={selectedImg}
-                  alt={product.name}
-                  className="h-full w-full object-contain"
-                />
+                <img src={selectedImg} alt={project.name} className="h-full w-full object-contain" />
               </button>
             </div>
             {displayedImages.length > 1 && (
@@ -176,9 +165,9 @@ function ProductDetailPage() {
           <div className="flex flex-col gap-4 lg:min-w-[200px] lg:pl-4">
             <div>
               <span className="rounded-full bg-stone-600 px-3 py-1 text-xs font-medium text-white">
-                {product.category.name}
+                {project.projectCategory.name}
               </span>
-              <h1 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{product.name}</h1>
+              <h1 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{project.name}</h1>
             </div>
             <a
               href="tel:0347916199"
@@ -193,24 +182,16 @@ function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Nội dung sản phẩm */}
-      {content && (
-        <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-6 md:p-8">
-          <h2 className="text-lg font-bold text-slate-800 sm:text-xl">Nội dung sản phẩm</h2>
-          <div className="prose prose-slate mt-4 max-w-none">{content}</div>
-        </div>
-      )}
-
-      {/* Sản phẩm nổi bật cùng phân loại */}
+      {/* Công trình thi công nổi bật khác */}
       {related.length > 0 && (
         <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
-              Sản phẩm nổi bật cùng phân loại
+              Công trình thi công nổi bật khác
             </h2>
             <Link
-              to="/san-pham"
-              search={{ categoryId: categoryId ?? undefined, categoryName: product.category.name }}
+              to="/cong-trinh-da-thi-cong"
+              search={{ categoryId: categoryId ?? undefined, categoryName: project.projectCategory.name }}
               className="text-xs font-medium text-stone-600 transition-colors hover:text-stone-800 sm:text-sm"
             >
               Xem thêm →
@@ -224,7 +205,7 @@ function ProductDetailPage() {
               className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
             >
               {related.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProjectCard key={p.id} project={p} />
               ))}
             </div>
           </div>

@@ -135,7 +135,7 @@ function ProductCard({ product, onViewImage }: { product: Product; onViewImage: 
             params={{ productId: product.id }}
             className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
           >
-            Chi tiết
+            Xem chi tiết
           </Link>
         </div>
       </div>
@@ -211,9 +211,13 @@ function ProjectCard({ project, onViewImage }: { project: Project; onViewImage: 
           <a href="tel:0347916199" className="flex-1 rounded-lg bg-stone-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-stone-700 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
-          <button type="button" onClick={() => onViewImage(imgUrl, project.name)} className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs">
-            Chi tiết
-          </button>
+          <Link
+            to="/cong-trinh-da-thi-cong/$projectId"
+            params={{ projectId: project.id }}
+            className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
+          >
+            Xem chi tiết
+          </Link>
         </div>
       </div>
     </article>

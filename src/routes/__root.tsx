@@ -221,6 +221,18 @@ function RootLayout() {
 				<Outlet />
 			</main>
 
+			<footer className="border-t border-amber-200/80 bg-amber-50/60 py-6">
+				<div className="mx-auto max-w-6xl px-4 text-center">
+					<p className="text-sm font-medium text-amber-950">Địa chỉ</p>
+					<p className="mt-1 text-xs text-amber-900/90 sm:text-sm">
+						Số 531 Âu Cơ , Tây Hồ ,
+					</p>
+					<p className="text-xs text-amber-900/90 sm:text-sm">
+						HN LK N07-23 HimLam News , Ngõ 24 Lý Sơn , Long Biên Hà Nội
+					</p>
+				</div>
+			</footer>
+
 			<div className="fixed bottom-4 right-3 z-20 flex flex-col gap-2.5 md:bottom-5 md:right-4 md:gap-3">
 				<a
 					href={`tel:${phoneNumber}`}

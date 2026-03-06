@@ -9,20 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CongTrinhDaThiCongRouteImport } from './routes/cong-trinh-da-thi-cong'
 import { Route as SanPhamRouteRouteImport } from './routes/san-pham/route'
+import { Route as CongTrinhDaThiCongRouteRouteImport } from './routes/cong-trinh-da-thi-cong/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SanPhamIndexRouteImport } from './routes/san-pham/index'
+import { Route as CongTrinhDaThiCongIndexRouteImport } from './routes/cong-trinh-da-thi-cong/index'
 import { Route as SanPhamProductIdRouteImport } from './routes/san-pham/$productId'
+import { Route as CongTrinhDaThiCongProjectIdRouteImport } from './routes/cong-trinh-da-thi-cong/$projectId'
 
-const CongTrinhDaThiCongRoute = CongTrinhDaThiCongRouteImport.update({
-  id: '/cong-trinh-da-thi-cong',
-  path: '/cong-trinh-da-thi-cong',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SanPhamRouteRoute = SanPhamRouteRouteImport.update({
   id: '/san-pham',
   path: '/san-pham',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CongTrinhDaThiCongRouteRoute = CongTrinhDaThiCongRouteRouteImport.update({
+  id: '/cong-trinh-da-thi-cong',
+  path: '/cong-trinh-da-thi-cong',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -35,72 +37,97 @@ const SanPhamIndexRoute = SanPhamIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SanPhamRouteRoute,
 } as any)
+const CongTrinhDaThiCongIndexRoute = CongTrinhDaThiCongIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CongTrinhDaThiCongRouteRoute,
+} as any)
 const SanPhamProductIdRoute = SanPhamProductIdRouteImport.update({
   id: '/$productId',
   path: '/$productId',
   getParentRoute: () => SanPhamRouteRoute,
 } as any)
+const CongTrinhDaThiCongProjectIdRoute =
+  CongTrinhDaThiCongProjectIdRouteImport.update({
+    id: '/$projectId',
+    path: '/$projectId',
+    getParentRoute: () => CongTrinhDaThiCongRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRouteRouteWithChildren
   '/san-pham': typeof SanPhamRouteRouteWithChildren
-  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
+  '/cong-trinh-da-thi-cong/$projectId': typeof CongTrinhDaThiCongProjectIdRoute
   '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/cong-trinh-da-thi-cong/': typeof CongTrinhDaThiCongIndexRoute
   '/san-pham/': typeof SanPhamIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
+  '/cong-trinh-da-thi-cong/$projectId': typeof CongTrinhDaThiCongProjectIdRoute
   '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongIndexRoute
   '/san-pham': typeof SanPhamIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRouteRouteWithChildren
   '/san-pham': typeof SanPhamRouteRouteWithChildren
-  '/cong-trinh-da-thi-cong': typeof CongTrinhDaThiCongRoute
+  '/cong-trinh-da-thi-cong/$projectId': typeof CongTrinhDaThiCongProjectIdRoute
   '/san-pham/$productId': typeof SanPhamProductIdRoute
+  '/cong-trinh-da-thi-cong/': typeof CongTrinhDaThiCongIndexRoute
   '/san-pham/': typeof SanPhamIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/san-pham'
     | '/cong-trinh-da-thi-cong'
+    | '/san-pham'
+    | '/cong-trinh-da-thi-cong/$projectId'
     | '/san-pham/$productId'
+    | '/cong-trinh-da-thi-cong/'
     | '/san-pham/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cong-trinh-da-thi-cong' | '/san-pham/$productId' | '/san-pham'
+  to:
+    | '/'
+    | '/cong-trinh-da-thi-cong/$projectId'
+    | '/san-pham/$productId'
+    | '/cong-trinh-da-thi-cong'
+    | '/san-pham'
   id:
     | '__root__'
     | '/'
-    | '/san-pham'
     | '/cong-trinh-da-thi-cong'
+    | '/san-pham'
+    | '/cong-trinh-da-thi-cong/$projectId'
     | '/san-pham/$productId'
+    | '/cong-trinh-da-thi-cong/'
     | '/san-pham/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CongTrinhDaThiCongRouteRoute: typeof CongTrinhDaThiCongRouteRouteWithChildren
   SanPhamRouteRoute: typeof SanPhamRouteRouteWithChildren
-  CongTrinhDaThiCongRoute: typeof CongTrinhDaThiCongRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/cong-trinh-da-thi-cong': {
-      id: '/cong-trinh-da-thi-cong'
-      path: '/cong-trinh-da-thi-cong'
-      fullPath: '/cong-trinh-da-thi-cong'
-      preLoaderRoute: typeof CongTrinhDaThiCongRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/san-pham': {
       id: '/san-pham'
       path: '/san-pham'
       fullPath: '/san-pham'
       preLoaderRoute: typeof SanPhamRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cong-trinh-da-thi-cong': {
+      id: '/cong-trinh-da-thi-cong'
+      path: '/cong-trinh-da-thi-cong'
+      fullPath: '/cong-trinh-da-thi-cong'
+      preLoaderRoute: typeof CongTrinhDaThiCongRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -117,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SanPhamIndexRouteImport
       parentRoute: typeof SanPhamRouteRoute
     }
+    '/cong-trinh-da-thi-cong/': {
+      id: '/cong-trinh-da-thi-cong/'
+      path: '/'
+      fullPath: '/cong-trinh-da-thi-cong/'
+      preLoaderRoute: typeof CongTrinhDaThiCongIndexRouteImport
+      parentRoute: typeof CongTrinhDaThiCongRouteRoute
+    }
     '/san-pham/$productId': {
       id: '/san-pham/$productId'
       path: '/$productId'
@@ -124,8 +158,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SanPhamProductIdRouteImport
       parentRoute: typeof SanPhamRouteRoute
     }
+    '/cong-trinh-da-thi-cong/$projectId': {
+      id: '/cong-trinh-da-thi-cong/$projectId'
+      path: '/$projectId'
+      fullPath: '/cong-trinh-da-thi-cong/$projectId'
+      preLoaderRoute: typeof CongTrinhDaThiCongProjectIdRouteImport
+      parentRoute: typeof CongTrinhDaThiCongRouteRoute
+    }
   }
 }
+
+interface CongTrinhDaThiCongRouteRouteChildren {
+  CongTrinhDaThiCongProjectIdRoute: typeof CongTrinhDaThiCongProjectIdRoute
+  CongTrinhDaThiCongIndexRoute: typeof CongTrinhDaThiCongIndexRoute
+}
+
+const CongTrinhDaThiCongRouteRouteChildren: CongTrinhDaThiCongRouteRouteChildren =
+  {
+    CongTrinhDaThiCongProjectIdRoute: CongTrinhDaThiCongProjectIdRoute,
+    CongTrinhDaThiCongIndexRoute: CongTrinhDaThiCongIndexRoute,
+  }
+
+const CongTrinhDaThiCongRouteRouteWithChildren =
+  CongTrinhDaThiCongRouteRoute._addFileChildren(
+    CongTrinhDaThiCongRouteRouteChildren,
+  )
 
 interface SanPhamRouteRouteChildren {
   SanPhamProductIdRoute: typeof SanPhamProductIdRoute
@@ -143,8 +200,8 @@ const SanPhamRouteRouteWithChildren = SanPhamRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CongTrinhDaThiCongRouteRoute: CongTrinhDaThiCongRouteRouteWithChildren,
   SanPhamRouteRoute: SanPhamRouteRouteWithChildren,
-  CongTrinhDaThiCongRoute: CongTrinhDaThiCongRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

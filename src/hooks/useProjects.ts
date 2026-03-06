@@ -43,9 +43,33 @@ async function fetchProjectsByCategory(categoryId: string): Promise<Project[]> {
   return res.json()
 }
 
+async function fetchProjectById(projectId: string): Promise<Project | null> {
+  try {
+    const res = await fetch(`${API_BASE}/project/${projectId}`, { headers: { accept: '*/*' } })
+    if (res.ok) return res.json()
+    const all = await fetchAllProjects()
+    return all.find((p) => p.id === projectId) ?? null
+  } catch {
+    try {
+      const all = await fetchAllProjects()
+      return all.find((p) => p.id === projectId) ?? null
+    } catch {
+      return null
+    }
+  }
+}
+
 export function useProjects(categoryId?: string) {
   return useQuery<Project[]>({
     queryKey: categoryId ? ['projects', 'category', categoryId] : ['projects'],
     queryFn: () => (categoryId ? fetchProjectsByCategory(categoryId) : fetchAllProjects()),
+  })
+}
+
+export function useProject(projectId: string | undefined) {
+  return useQuery<Project | null>({
+    queryKey: ['project', projectId],
+    queryFn: () => (projectId ? fetchProjectById(projectId) : Promise.resolve(null)),
+    enabled: !!projectId,
   })
 }
