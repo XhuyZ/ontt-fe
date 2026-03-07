@@ -29,6 +29,13 @@ export const CATEGORY_MAP: Record<string, string> = {
 
 export const PRODUCT_CATEGORY_ORDER: string[] = ['Nhựa Nano', 'Tấm PVC', 'Lam sóng', 'Than tre']
 
+/** Hiển thị "Lam sóng" thay cho "Lam sóng ngoài trời" và các biến thể tương tự */
+export function getDisplayCategoryName(name: string): string {
+  const n = name.trim().toLowerCase()
+  if (n.includes('lam') && n.includes('sóng')) return 'Lam sóng'
+  return name
+}
+
 async function fetchAllProducts(): Promise<Product[]> {
   const res = await fetch(`${API_BASE}/products`, { headers: { accept: '*/*' } })
   if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`)

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useRef, useCallback } from 'react'
 import { useProject, useProjects } from '../../hooks/useProjects'
 import { Lightbox } from '../../components/Lightbox'
+import { VideoShortsSection } from '../../components/VideoShortsSection'
 import type { Project } from '../../hooks/useProjects'
 
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
@@ -21,11 +22,11 @@ function SliderArrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => v
     <button
       type="button"
       onClick={onClick}
-      className="absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-stone-200 bg-white/90 p-2 shadow-md backdrop-blur transition-all hover:bg-stone-50 active:scale-90 sm:p-2.5"
+      className="absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-stone-200 bg-white/90 p-2 shadow-md backdrop-blur transition-all hover:bg-amber-50 active:scale-90 sm:p-2.5"
       style={{ [dir === 'left' ? 'left' : 'right']: '0.25rem' }}
       aria-label={dir === 'left' ? 'Trước' : 'Sau'}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 text-stone-700 sm:h-5 sm:w-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 text-amber-950 sm:h-5 sm:w-5">
         {dir === 'left' ? (
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         ) : (
@@ -52,28 +53,28 @@ function ProjectCard({ project }: { project: Project }) {
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
-          <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+          <span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
             {project.projectCategory.name}
           </span>
         </div>
       </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <Link to="/cong-trinh-da-thi-cong/$projectId" params={{ projectId: project.id }}>
-          <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 hover:text-stone-600 sm:text-sm">
+          <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 hover:text-amber-950 sm:text-sm">
             {project.name}
           </h3>
         </Link>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
           <a
             href="tel:0347916199"
-            className="flex-1 rounded-lg bg-stone-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-stone-700 sm:py-2 sm:text-xs"
+            className="flex-1 rounded-lg bg-amber-900 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-amber-950 sm:py-2 sm:text-xs"
           >
             Liên hệ
           </a>
           <Link
             to="/cong-trinh-da-thi-cong/$projectId"
             params={{ projectId: project.id }}
-            className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
+            className="flex-1 rounded-lg border border-amber-800 py-1.5 text-center text-[10px] font-medium text-amber-950 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs"
           >
             Xem chi tiết
           </Link>
@@ -122,7 +123,7 @@ function ProjectDetailPage() {
         <Link
           to="/cong-trinh-da-thi-cong"
           search={{ categoryId: undefined, categoryName: undefined }}
-          className="mt-4 inline-block rounded-lg bg-stone-600 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700"
+          className="mt-4 inline-block rounded-lg bg-amber-900 px-4 py-2 text-sm font-medium text-white hover:bg-amber-950"
         >
           Quay lại danh sách
         </Link>
@@ -153,7 +154,7 @@ function ProjectDetailPage() {
                     type="button"
                     onClick={() => setSelectedImgIdx(i)}
                     className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
-                      i === selectedImgIdx ? 'border-stone-600' : 'border-stone-200 hover:border-stone-400'
+                      i === selectedImgIdx ? 'border-amber-900' : 'border-stone-200 hover:border-stone-400'
                     }`}
                   >
                     <img src={img.imgUrl} alt="" className="h-full w-full object-cover" />
@@ -164,14 +165,14 @@ function ProjectDetailPage() {
           </div>
           <div className="flex flex-col gap-4 lg:min-w-[200px] lg:pl-6 lg:pr-20">
             <div>
-              <span className="rounded-full bg-stone-600 px-3 py-1 text-xs font-medium text-white">
+              <span className="rounded-full bg-amber-900 px-3 py-1 text-xs font-medium text-white">
                 {project.projectCategory.name}
               </span>
               <h1 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{project.name}</h1>
             </div>
             <a
               href="tel:0347916199"
-              className="flex items-center justify-center gap-2 rounded-xl bg-stone-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-stone-700"
+              className="flex items-center justify-center gap-2 rounded-xl bg-amber-900 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-amber-950"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
@@ -192,7 +193,7 @@ function ProjectDetailPage() {
             <Link
               to="/cong-trinh-da-thi-cong"
               search={{ categoryId: categoryId ?? undefined, categoryName: project.projectCategory.name }}
-              className="text-xs font-medium text-stone-600 transition-colors hover:text-stone-800 sm:text-sm"
+              className="text-xs font-medium text-amber-950 transition-colors hover:text-amber-950 sm:text-sm"
             >
               Xem thêm →
             </Link>
@@ -211,6 +212,11 @@ function ProjectDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Video giới thiệu */}
+      <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-6">
+        <VideoShortsSection />
+      </div>
 
       {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </section>

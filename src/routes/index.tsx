@@ -2,20 +2,13 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useProducts } from '../hooks/useProducts'
 import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER } from '../hooks/useProjects'
-import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER } from '../hooks/useProducts'
-import { Lightbox } from '../components/Lightbox'
+import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER, getDisplayCategoryName } from '../hooks/useProducts'
+import { VideoShortsSection } from '../components/VideoShortsSection'
 import type { Product } from '../hooks/useProducts'
 import type { Project } from '../hooks/useProjects'
 
 const heroImages = ['/heropic1.jpg', '/heropic2.jpg', '/heropic3.jpg', '/heropic4.jpg']
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
-
-const YOUTUBE_SHORTS = [
-  { id: 'qk3sBFK7b1A', url: 'https://www.youtube.com/shorts/qk3sBFK7b1A' },
-  { id: 'z7OrgqEuiS4', url: 'https://www.youtube.com/shorts/z7OrgqEuiS4' },
-  { id: 'QW1x7LBPPCg', url: 'https://www.youtube.com/shorts/QW1x7LBPPCg' },
-  { id: 'RyQuML1goTM', url: 'https://www.youtube.com/shorts/RyQuML1goTM' },
-]
 
 const commitments = [
   'Thi công nhanh chóng, độ hoàn thiện cao',
@@ -73,11 +66,11 @@ function SliderArrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => v
     <button
       type="button"
       onClick={onClick}
-      className="absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-stone-200 bg-white/90 p-2 shadow-md backdrop-blur transition-all hover:bg-stone-50 active:scale-90 sm:p-2.5"
+      className="absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-stone-200 bg-white/90 p-2 shadow-md backdrop-blur transition-all hover:bg-amber-50 active:scale-90 sm:p-2.5"
       style={{ [dir === 'left' ? 'left' : 'right']: '0.25rem' }}
       aria-label={dir === 'left' ? 'Trước' : 'Sau'}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 text-stone-700 sm:h-5 sm:w-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 text-amber-950 sm:h-5 sm:w-5">
         {dir === 'left' ? (
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         ) : (
@@ -114,26 +107,30 @@ function SliderSkeleton() {
 /* ------------------------------------------------------------------ */
 /*  Cards                                                              */
 /* ------------------------------------------------------------------ */
-function ProductCard({ product, onViewImage }: { product: Product; onViewImage: (src: string, alt: string) => void }) {
+function ProductCard({ product }: { product: Product }) {
   const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
   return (
     <article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
-      <button type="button" className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100" onClick={() => onViewImage(imgUrl, product.name)}>
-        <img src={imgUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
-        <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
-          {product.category.name}
+      <Link
+        to="/san-pham/$productId"
+        params={{ productId: product.id }}
+        className="group relative block aspect-[4/3] w-full overflow-hidden bg-slate-100"
+      >
+        <img src={imgUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+        <span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
+          {getDisplayCategoryName(product.category.name)}
         </span>
-      </button>
+      </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 sm:text-sm">{product.name}</h3>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
-          <a href="tel:0347916199" className="flex-1 rounded-lg bg-stone-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-stone-700 sm:py-2 sm:text-xs">
+          <a href="tel:0347916199" className="flex-1 rounded-lg bg-amber-900 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-amber-950 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
           <Link
             to="/san-pham/$productId"
             params={{ productId: product.id }}
-            className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
+            className="flex-1 rounded-lg border border-amber-800 py-1.5 text-center text-[10px] font-medium text-amber-950 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs"
           >
             Xem chi tiết
           </Link>
@@ -146,15 +143,7 @@ function ProductCard({ product, onViewImage }: { product: Product; onViewImage: 
 /* ------------------------------------------------------------------ */
 /*  Product category row (max 6 products per category)                 */
 /* ------------------------------------------------------------------ */
-function ProductCategoryRow({
-  categoryName,
-  categoryId,
-  onViewImage,
-}: {
-  categoryName: string
-  categoryId: string
-  onViewImage: (src: string, alt: string) => void
-}) {
+function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
   const slider = useSlider()
   const { data: products, isLoading } = useProducts(categoryId)
   const displayed = (products ?? []).slice(0, 6)
@@ -166,7 +155,7 @@ function ProductCategoryRow({
         <Link
           to="/san-pham"
           search={{ categoryId, categoryName }}
-          className="text-xs font-medium text-stone-600 transition-colors hover:text-stone-800 sm:text-sm"
+          className="text-xs font-medium text-amber-950 transition-colors hover:text-amber-950 sm:text-sm"
         >
           Xem thêm →
         </Link>
@@ -184,7 +173,7 @@ function ProductCategoryRow({
             className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
           >
             {displayed.map((p) => (
-              <ProductCard key={p.id} product={p} onViewImage={onViewImage} />
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </div>
@@ -195,26 +184,30 @@ function ProductCategoryRow({
   )
 }
 
-function ProjectCard({ project, onViewImage }: { project: Project; onViewImage: (src: string, alt: string) => void }) {
+function ProjectCard({ project }: { project: Project }) {
   const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
   return (
     <article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
-      <button type="button" className="relative aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-slate-100" onClick={() => onViewImage(imgUrl, project.name)}>
-        <img src={imgUrl} alt={project.name} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
-        <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
+      <Link
+        to="/cong-trinh-da-thi-cong/$projectId"
+        params={{ projectId: project.id }}
+        className="group relative block aspect-[4/3] w-full overflow-hidden bg-slate-100"
+      >
+        <img src={imgUrl} alt={project.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+        <span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
           {project.projectCategory.name}
         </span>
-      </button>
+      </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 text-xs font-semibold text-slate-900 sm:text-sm">{project.name}</h3>
         <div className="mt-auto flex gap-1.5 pt-2.5 sm:gap-2 sm:pt-3">
-          <a href="tel:0347916199" className="flex-1 rounded-lg bg-stone-600 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-stone-700 sm:py-2 sm:text-xs">
+          <a href="tel:0347916199" className="flex-1 rounded-lg bg-amber-900 py-1.5 text-center text-[10px] font-medium text-white transition-colors hover:bg-amber-950 sm:py-2 sm:text-xs">
             Liên hệ
           </a>
           <Link
             to="/cong-trinh-da-thi-cong/$projectId"
             params={{ projectId: project.id }}
-            className="flex-1 rounded-lg border border-stone-500 py-1.5 text-center text-[10px] font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:py-2 sm:text-xs"
+            className="flex-1 rounded-lg border border-amber-800 py-1.5 text-center text-[10px] font-medium text-amber-950 transition-colors hover:bg-amber-50 sm:py-2 sm:text-xs"
           >
             Xem chi tiết
           </Link>
@@ -227,15 +220,7 @@ function ProjectCard({ project, onViewImage }: { project: Project; onViewImage: 
 /* ------------------------------------------------------------------ */
 /*  Project category row (max 6 projects per category)                 */
 /* ------------------------------------------------------------------ */
-function ProjectCategoryRow({
-  categoryName,
-  categoryId,
-  onViewImage,
-}: {
-  categoryName: string
-  categoryId: string
-  onViewImage: (src: string, alt: string) => void
-}) {
+function ProjectCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
   const slider = useSlider()
   const { data: projects, isLoading } = useProjects(categoryId)
   const displayed = (projects ?? []).slice(0, 6)
@@ -247,7 +232,7 @@ function ProjectCategoryRow({
         <Link
           to="/cong-trinh-da-thi-cong"
           search={{ categoryId, categoryName }}
-          className="text-xs font-medium text-stone-600 transition-colors hover:text-stone-800 sm:text-sm"
+          className="text-xs font-medium text-amber-950 transition-colors hover:text-amber-950 sm:text-sm"
         >
           Xem thêm →
         </Link>
@@ -265,7 +250,7 @@ function ProjectCategoryRow({
             className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
           >
             {displayed.map((p) => (
-              <ProjectCard key={p.id} project={p} onViewImage={onViewImage} />
+              <ProjectCard key={p.id} project={p} />
             ))}
           </div>
         </div>
@@ -283,7 +268,6 @@ function HomePage() {
   const { scrollTo } = Route.useSearch()
   const [heroIdx, setHeroIdx] = useState(0)
   const [heroReady, setHeroReady] = useState(false)
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
   const productsReveal = useReveal()
   const projectsReveal = useReveal()
   const videosReveal = useReveal()
@@ -347,7 +331,7 @@ function HomePage() {
             <button
               type="button"
               onClick={() => document.getElementById('featured-products')?.scrollIntoView({ behavior: 'smooth' })}
-              className="flex items-center gap-2 rounded-full bg-white/90 px-6 py-2.5 text-sm font-semibold text-amber-900 shadow-lg backdrop-blur transition-all hover:bg-white hover:shadow-xl active:scale-95 sm:px-8 sm:py-3 sm:text-base"
+              className="flex items-center gap-2 rounded-full bg-white/90 px-6 py-2.5 text-sm font-semibold text-amber-950 shadow-lg backdrop-blur transition-all hover:bg-white hover:shadow-xl active:scale-95 sm:px-8 sm:py-3 sm:text-base"
             >
               Khám phá
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 animate-bounce sm:h-5 sm:w-5">
@@ -397,7 +381,7 @@ function HomePage() {
           <Link
             to="/san-pham"
             search={{ categoryId: undefined, categoryName: undefined }}
-            className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-stone-700 transition-colors hover:bg-stone-100 sm:text-sm"
+            className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-amber-950 transition-colors hover:bg-stone-100 sm:text-sm"
           >
             Xem tất cả
           </Link>
@@ -409,7 +393,6 @@ function HomePage() {
               key={categoryName}
               categoryName={categoryName}
               categoryId={CATEGORY_MAP[categoryName]}
-              onViewImage={(src, alt) => setLightbox({ src, alt })}
             />
           ))}
         </div>
@@ -428,7 +411,7 @@ function HomePage() {
           <Link
             to="/cong-trinh-da-thi-cong"
             search={{ categoryId: undefined, categoryName: undefined }}
-            className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-stone-700 transition-colors hover:bg-stone-100 sm:text-sm"
+            className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-amber-950 transition-colors hover:bg-stone-100 sm:text-sm"
           >
             Xem tất cả
           </Link>
@@ -440,49 +423,18 @@ function HomePage() {
               key={categoryName}
               categoryName={categoryName}
               categoryId={PROJECT_CATEGORY_MAP[categoryName]}
-              onViewImage={(src, alt) => setLightbox({ src, alt })}
             />
           ))}
         </div>
       </section>
 
       {/* ==================== FRAME 4 — VIDEO GIỚI THIỆU ==================== */}
-      <section
-        id="featured-videos"
+      <div
         ref={videosReveal.ref}
-        className={`scroll-mt-20 transition-all duration-500 ease-out ${videosReveal.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+        className={`transition-all duration-500 ease-out ${videosReveal.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
       >
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Video giới thiệu</h2>
-          <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Xem video thực tế quá trình thi công và sản phẩm</p>
-        </div>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {YOUTUBE_SHORTS.map((video) => (
-            <div
-              key={video.id}
-              className="overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg"
-            >
-              <div className="relative aspect-[9/16] w-full overflow-hidden bg-slate-100">
-                <iframe
-                  src={`https://www.youtube.com/embed/${video.id}`}
-                  title={`Video giới thiệu ${video.id}`}
-                  className="absolute inset-0 h-full w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              </div>
-              <a
-                href={video.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block px-3 py-2 text-center text-xs font-medium text-stone-600 transition-colors hover:text-stone-800 sm:px-4 sm:py-2.5 sm:text-sm"
-              >
-                Xem trên YouTube →
-              </a>
-            </div>
-          ))}
-        </div>
-      </section>
+        <VideoShortsSection id="featured-videos" />
+      </div>
 
       {/* ==================== FRAME 5 — VỀ CHÚNG TÔI ==================== */}
       <section id="ve-chung-toi" className="scroll-mt-20 rounded-2xl bg-white p-5 shadow-sm sm:p-6 md:p-8">
@@ -511,7 +463,6 @@ function HomePage() {
         </div>
       </section>
 
-      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </div>
   )
 }

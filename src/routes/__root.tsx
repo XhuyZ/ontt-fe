@@ -47,7 +47,7 @@ function RootLayout() {
 	}
 
 	const navLinkClass = 'block px-3 py-2 text-sm font-medium text-amber-900 rounded-lg hover:bg-amber-100/60 transition-colors md:px-1 md:py-1 md:rounded-none md:hover:bg-transparent'
-	const navLinkActiveClass = 'bg-amber-100 text-amber-700 md:bg-transparent md:border-b-2 md:border-amber-700'
+	const navLinkActiveClass = 'bg-amber-100 text-amber-900 md:bg-transparent md:border-b-2 md:border-amber-900'
 
 	return (
 		<div className="min-h-screen bg-amber-50/40">
@@ -97,11 +97,11 @@ function RootLayout() {
 								</svg>
 							</button>
 							<div className={`absolute left-0 top-full mt-2 min-w-48 origin-top rounded-lg border border-amber-200 bg-white p-2 shadow-md transition-all duration-200 ${isProductMenuOpen ? 'pointer-events-auto translate-y-0 scale-100 opacity-100' : 'pointer-events-none -translate-y-1 scale-95 opacity-0'}`}>
-								<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-100" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700' }}>
+								<Link to="/san-pham" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-100" activeProps={{ className: 'mb-1 block rounded-md border border-amber-900 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-900' }}>
 									Tất cả
 								</Link>
 								{productCategories.map((name) => (
-									<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-50 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700 last:mb-0' }}>
+									<Link key={name} to="/san-pham" search={{ categoryId: CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 transition-colors hover:bg-amber-50 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-amber-900 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-900 last:mb-0' }}>
 										{name}
 									</Link>
 								))}
@@ -122,11 +122,11 @@ function RootLayout() {
 								</svg>
 							</button>
 							<div className={`absolute left-0 top-full mt-2 min-w-48 origin-top rounded-lg border border-amber-200 bg-white p-2 shadow-md transition-all duration-200 ${isProjectMenuOpen ? 'pointer-events-auto translate-y-0 scale-100 opacity-100' : 'pointer-events-none -translate-y-1 scale-95 opacity-0'}`}>
-								<Link to="/cong-trinh-da-thi-cong" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700' }}>
+								<Link to="/cong-trinh-da-thi-cong" search={{ categoryId: undefined, categoryName: undefined }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900" activeProps={{ className: 'mb-1 block rounded-md border border-amber-900 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-900' }}>
 									Tất cả
 								</Link>
 								{projectCategories.map((name) => (
-									<Link key={name} to="/cong-trinh-da-thi-cong" search={{ categoryId: PROJECT_CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-amber-700 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700 last:mb-0' }}>
+									<Link key={name} to="/cong-trinh-da-thi-cong" search={{ categoryId: PROJECT_CATEGORY_MAP[name], categoryName: name }} onClick={closeAll} className="mb-1 block rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-amber-900 last:mb-0" activeProps={{ className: 'mb-1 block rounded-md border border-amber-900 bg-amber-100 px-3 py-2 text-sm font-medium text-amber-900 last:mb-0' }}>
 										{name}
 									</Link>
 								))}

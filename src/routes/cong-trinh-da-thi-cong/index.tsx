@@ -47,27 +47,27 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
-        <span className="absolute left-2 top-2 rounded-full bg-stone-600 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
+        <span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1">
           {project.projectCategory.name}
         </span>
       </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <Link to="/cong-trinh-da-thi-cong/$projectId" params={{ projectId: project.id }}>
-          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 hover:text-stone-600 sm:text-base">
+          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 hover:text-amber-950 sm:text-base">
             {project.name}
           </h3>
         </Link>
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <a
             href="tel:0347916199"
-            className="flex-1 rounded-lg bg-stone-600 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-stone-700 sm:px-3 sm:py-2.5 sm:text-sm"
+            className="flex-1 rounded-lg bg-amber-900 px-2 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-amber-950 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Liên hệ
           </a>
           <Link
             to="/cong-trinh-da-thi-cong/$projectId"
             params={{ projectId: project.id }}
-            className="flex-1 rounded-lg border border-stone-500 px-2 py-2 text-center text-xs font-medium text-stone-700 transition-colors hover:bg-stone-50 sm:px-3 sm:py-2.5 sm:text-sm"
+            className="flex-1 rounded-lg border border-amber-800 px-2 py-2 text-center text-xs font-medium text-amber-900 transition-colors hover:bg-amber-50 sm:px-3 sm:py-2.5 sm:text-sm"
           >
             Xem chi tiết
           </Link>
@@ -97,8 +97,8 @@ function ProjectsPage() {
             search={{ categoryId: undefined, categoryName: undefined }}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm ${
               !categoryId
-                ? 'border-stone-600 bg-stone-600 text-white'
-                : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
+                ? 'border-amber-900 bg-amber-900 text-white'
+                : 'border-stone-200 bg-white text-amber-900 hover:bg-amber-50'
             }`}
           >
             Tất cả
@@ -110,8 +110,8 @@ function ProjectsPage() {
               search={{ categoryId: id, categoryName: name }}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm ${
                 categoryId === id
-                  ? 'border-stone-600 bg-stone-600 text-white'
-                  : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
+                  ? 'border-amber-900 bg-amber-900 text-white'
+                  : 'border-stone-200 bg-white text-amber-900 hover:bg-amber-50'
               }`}
             >
               {name}
