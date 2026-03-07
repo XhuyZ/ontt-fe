@@ -277,6 +277,19 @@ function RootLayout() {
 					<span className="absolute h-12 w-12 rounded-full bg-sky-400/20 animate-pulse [animation-delay:150ms] md:h-14 md:w-14" />
 					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-7 w-7 object-contain md:h-8 md:w-8" />
 				</a>
+				<a
+					href="https://www.youtube.com/@%E1%BB%90pNh%E1%BB%B1aTu%E1%BA%A5nKi%E1%BB%87t/shorts"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="YouTube Shorts"
+					title="YouTube Shorts"
+					className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105 md:h-14 md:w-14"
+				>
+					<span className="absolute h-12 w-12 rounded-full bg-red-400/20 animate-pulse [animation-delay:300ms] md:h-14 md:w-14" />
+					<svg viewBox="0 0 24 24" className="relative z-10 h-6 w-6 text-red-600 md:h-7 md:w-7" fill="currentColor" aria-hidden="true">
+						<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+					</svg>
+				</a>
 			</div>
 		</div>
 	)
