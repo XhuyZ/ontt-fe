@@ -2,10 +2,10 @@ import type { ReactNode } from 'react'
 
 const LAM_SONG_PVC_CONTENT = (
   <>
-    <h3 className="text-base font-bold text-slate-800 sm:text-lg">Lam sóng PVC vách ngăn</h3>
+    <h3 className="text-base font-bold text-slate-800 sm:text-lg">Lam sóng PVC</h3>
     <h4 className="mt-6 text-base font-bold text-slate-800 sm:text-lg">Đặc tính nổi bật</h4>
     <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-      Lam sóng PVC vách ngăn là một sản phẩm được sản xuất từ nhựa PVC, mang lại nhiều ưu điểm vượt trội so với các
+      Lam sóng PVC là một sản phẩm được sản xuất từ nhựa PVC, mang lại nhiều ưu điểm vượt trội so với các
       vật liệu truyền thống như gỗ hay thạch cao. Với khả năng chống ẩm, chống mối mọt và không bị biến dạng dưới tác
       động của thời tiết, lam sóng PVC là lựa chọn lý tưởng cho các không gian nội thất và ngoại thất. Đặc biệt, sản
       phẩm này có trọng lượng nhẹ, dễ dàng lắp đặt và di chuyển, giúp tiết kiệm thời gian và công sức cho người sử
@@ -29,7 +29,7 @@ const LAM_SONG_PVC_CONTENT = (
       <li>
         <strong>Thiết kế đa dạng:</strong> Lam sóng PVC có nhiều mẫu mã và màu sắc khác nhau, giúp người dùng dễ dàng
         lựa chọn theo phong cách thiết kế của không gian. Sản phẩm có thể được sử dụng trong nhiều ứng dụng khác nhau,
-        từ vách ngăn văn phòng đến trang trí nội thất gia đình.
+        từ văn phòng đến trang trí nội thất gia đình.
       </li>
       <li>
         <strong>Thân thiện với môi trường:</strong> Lam sóng PVC được sản xuất từ nguyên liệu tái chế, góp phần giảm
@@ -39,12 +39,12 @@ const LAM_SONG_PVC_CONTENT = (
 
     <h4 className="mt-6 text-base font-bold text-slate-800 sm:text-lg">Các ứng dụng phổ biến</h4>
     <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-      Lam sóng PVC vách ngăn có thể được sử dụng trong nhiều lĩnh vực khác nhau, bao gồm:
+      Lam sóng PVC có thể được sử dụng trong nhiều lĩnh vực khác nhau, bao gồm:
     </p>
     <ul className="mt-2 space-y-2 text-sm leading-relaxed text-slate-600 sm:text-base">
       <li>
-        <strong>Văn phòng:</strong> Sử dụng lam sóng PVC để tạo ra các vách ngăn giữa các khu vực làm việc, giúp tối
-        ưu hóa không gian và tăng tính riêng tư cho nhân viên.
+        <strong>Văn phòng:</strong> Sử dụng lam sóng PVC để phân chia các khu vực làm việc, giúp tối ưu hóa không
+        gian và tăng tính riêng tư cho nhân viên.
       </li>
       <li>
         <strong>Nhà ở:</strong> Lam sóng PVC có thể được sử dụng để phân chia các phòng trong nhà, tạo ra không gian
@@ -160,7 +160,7 @@ function normalizeCategory(name: string): string {
 
 export function getProductContent(categoryName: string): ReactNode {
   const n = normalizeCategory(categoryName)
-  // Lam sóng và Tấm ốp PVC / Tấm PVC: cùng nội dung Lam sóng PVC vách ngăn
+  // Lam sóng và Tấm ốp PVC / Tấm PVC: cùng nội dung Lam sóng PVC
   if (n.includes('lam') && n.includes('sóng')) return LAM_SONG_PVC_CONTENT
   if (n.includes('pvc') || n.includes('tấm ốp pvc')) return LAM_SONG_PVC_CONTENT
   // Than tre
