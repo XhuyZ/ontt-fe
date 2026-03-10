@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-const API_BASE = 'https://api.opnhuatuankiet.io.vn'
+const API_BASE = '/api'
 
 export interface ProductImage {
   id: string
