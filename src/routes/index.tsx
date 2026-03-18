@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useProducts } from '../hooks/useProducts'
 import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER } from '../hooks/useProjects'
 import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER, getDisplayCategoryName } from '../hooks/useProducts'
@@ -49,46 +49,13 @@ function useReveal() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Horizontal scroll slider                                           */
-/* ------------------------------------------------------------------ */
-function useSlider() {
-	const ref = useRef<HTMLDivElement>(null)
-	const scroll = useCallback((dir: 'left' | 'right') => {
-		if (!ref.current) return
-		const amount = ref.current.clientWidth * 0.75
-		ref.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' })
-	}, [])
-	return { ref, scroll }
-}
-
-function SliderArrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => void }) {
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			className="absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-stone-200 bg-white/90 p-2 shadow-md backdrop-blur transition-all hover:bg-amber-50 active:scale-90 sm:p-2.5"
-			style={{ [dir === 'left' ? 'left' : 'right']: '0.25rem' }}
-			aria-label={dir === 'left' ? 'Trước' : 'Sau'}
-		>
-			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 text-amber-950 sm:h-5 sm:w-5">
-				{dir === 'left' ? (
-					<path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-				) : (
-					<path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-				)}
-			</svg>
-		</button>
-	)
-}
-
-/* ------------------------------------------------------------------ */
-/*  Skeleton card for slider loading                                   */
+/*  Skeleton card(s) for loading                                       */
 /* ------------------------------------------------------------------ */
 function SliderSkeleton() {
 	return (
 		<>
 			{Array.from({ length: 6 }).map((_, i) => (
-				<div key={i} className="w-44 flex-shrink-0 overflow-hidden rounded-2xl border border-slate-200/60 bg-white sm:w-56 md:w-64">
+				<div key={i} className="w-full overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
 					<div className="skeleton aspect-[4/3] w-full" />
 					<div className="p-3 sm:p-4">
 						<div className="skeleton h-3.5 w-3/4 rounded" />
@@ -108,9 +75,11 @@ function SliderSkeleton() {
 /*  Cards                                                              */
 /* ------------------------------------------------------------------ */
 function ProductCard({ product }: { product: Product }) {
-	const imgUrl = product.images[0]?.imgUrl ?? PLACEHOLDER_IMG
+	const imgUrl = product.images?.[0]?.imgUrl ?? PLACEHOLDER_IMG
+	const rawCategoryName = product.category?.name ?? ''
+	const displayCategoryName = rawCategoryName ? getDisplayCategoryName(rawCategoryName) : 'Sản phẩm'
 	return (
-		<article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
+		<article className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg">
 			<Link
 				to="/san-pham/$productId"
 				params={{ productId: product.id }}
@@ -118,7 +87,7 @@ function ProductCard({ product }: { product: Product }) {
 			>
 				<img src={imgUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
 				<span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
-					{getDisplayCategoryName(product.category.name)}
+					{displayCategoryName}
 				</span>
 			</Link>
 			<div className="flex flex-1 flex-col p-3 sm:p-4">
@@ -141,12 +110,11 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Product category row (max 6 products per category)                 */
+/*  Product category row                                               */
 /* ------------------------------------------------------------------ */
 function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
-	const slider = useSlider()
-	const { data: products, isLoading } = useProducts(categoryId)
-	const displayed = (products ?? []).slice(0, 6)
+	const { data: products, isLoading, isError, error } = useProducts(categoryId)
+	const displayed = products ?? []
 
 	return (
 		<div className="space-y-3">
@@ -161,21 +129,18 @@ function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="no-scrollbar flex gap-3 overflow-x-auto px-1 py-1 sm:gap-4">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
 					<SliderSkeleton />
 				</div>
+			) : isError ? (
+				<p className="py-4 text-center text-sm text-red-600">
+					Không tải được sản phẩm. {error instanceof Error ? error.message : ''}
+				</p>
 			) : displayed.length > 0 ? (
-				<div className="relative">
-					<SliderArrow dir="left" onClick={() => slider.scroll('left')} />
-					<SliderArrow dir="right" onClick={() => slider.scroll('right')} />
-					<div
-						ref={slider.ref}
-						className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
-					>
-						{displayed.map((p) => (
-							<ProductCard key={p.id} product={p} />
-						))}
-					</div>
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+					{displayed.map((p) => (
+						<ProductCard key={p.id} product={p} />
+					))}
 				</div>
 			) : (
 				<p className="py-4 text-center text-sm text-slate-400">Chưa có sản phẩm trong danh mục này.</p>
@@ -187,7 +152,7 @@ function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string
 function ProjectCard({ project }: { project: Project }) {
 	const imgUrl = project.images[0]?.imgUrl ?? PLACEHOLDER_IMG
 	return (
-		<article className="flex h-full w-44 flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg sm:w-56 md:w-64">
+		<article className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition-shadow hover:shadow-lg">
 			<Link
 				to="/cong-trinh-da-thi-cong/$projectId"
 				params={{ projectId: project.id }}
@@ -218,12 +183,11 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Project category row (max 6 projects per category)                 */
+/*  Project category row                                               */
 /* ------------------------------------------------------------------ */
 function ProjectCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
-	const slider = useSlider()
 	const { data: projects, isLoading } = useProjects(categoryId)
-	const displayed = (projects ?? []).slice(0, 6)
+	const displayed = projects ?? []
 
 	return (
 		<div className="space-y-3">
@@ -238,21 +202,14 @@ function ProjectCategoryRow({ categoryName, categoryId }: { categoryName: string
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="no-scrollbar flex gap-3 overflow-x-auto px-1 py-1 sm:gap-4">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
 					<SliderSkeleton />
 				</div>
 			) : displayed.length > 0 ? (
-				<div className="relative">
-					<SliderArrow dir="left" onClick={() => slider.scroll('left')} />
-					<SliderArrow dir="right" onClick={() => slider.scroll('right')} />
-					<div
-						ref={slider.ref}
-						className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-4"
-					>
-						{displayed.map((p) => (
-							<ProjectCard key={p.id} project={p} />
-						))}
-					</div>
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+					{displayed.map((p) => (
+						<ProjectCard key={p.id} project={p} />
+					))}
 				</div>
 			) : (
 				<p className="py-4 text-center text-sm text-slate-400">Chưa có công trình trong danh mục này.</p>
@@ -376,7 +333,7 @@ function HomePage() {
 				<div className="mb-6 flex items-center justify-between sm:mb-8">
 					<div>
 						<h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Sản phẩm nổi bật</h2>
-						<p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Các sản phẩm theo phân loại (tối đa 6 sản phẩm/loại)</p>
+						<p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Các sản phẩm theo phân loại</p>
 					</div>
 					<Link
 						to="/san-pham"
