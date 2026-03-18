@@ -121,7 +121,7 @@ function ProjectsPage() {
       </div>
 
       {isLoading && (
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-3 gap-3 sm:gap-5 md:grid-cols-4 xl:grid-cols-5">
           {Array.from({ length: 8 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}
@@ -142,7 +142,7 @@ function ProjectsPage() {
       )}
 
       {projects && projects.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-3 gap-3 sm:gap-5 md:grid-cols-4 xl:grid-cols-5">
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}

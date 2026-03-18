@@ -139,7 +139,7 @@ function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					<SliderSkeleton />
 				</div>
 			) : isError ? (
@@ -147,7 +147,7 @@ function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string
 					Không tải được sản phẩm. {error instanceof Error ? error.message : ''}
 				</p>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					{displayed.map((p) => (
 						<ProductCard key={p.id} product={p} />
 					))}
@@ -212,11 +212,11 @@ function ProjectCategoryRow({ categoryName, categoryId }: { categoryName: string
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					<SliderSkeleton />
 				</div>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
+				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					{displayed.map((p) => (
 						<ProjectCard key={p.id} project={p} />
 					))}
