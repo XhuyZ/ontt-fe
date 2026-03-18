@@ -116,10 +116,20 @@ function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string
 	const { data: products, isLoading, isError, error } = useProducts(categoryId)
 	const displayed = products ?? []
 
+	if (products) {
+		// Debug: log số lượng sản phẩm theo phân loại trên trang chủ
+		console.log('[Home] Products for category', categoryName, '(', categoryId, '):', products.length)
+	}
+
 	return (
 		<div className="space-y-3">
 			<div className="flex items-center justify-between">
-				<h3 className="text-base font-bold text-slate-800 sm:text-lg">{categoryName}</h3>
+				<h3 className="text-base font-bold text-slate-800 sm:text-lg">
+					{categoryName}
+					{products && (
+						<span className="ml-2 text-xs font-normal text-slate-500">({products.length} sản phẩm)</span>
+					)}
+				</h3>
 				<Link
 					to="/san-pham"
 					search={{ categoryId, categoryName }}
@@ -225,7 +235,6 @@ function HomePage() {
 	const { scrollTo } = Route.useSearch()
 	const [heroIdx, setHeroIdx] = useState(0)
 	const [heroReady, setHeroReady] = useState(false)
-	const productsReveal = useReveal()
 	const projectsReveal = useReveal()
 	const videosReveal = useReveal()
 
@@ -325,11 +334,7 @@ function HomePage() {
 			</section>
 
 			{/* ==================== FRAME 2 — SẢN PHẨM NỔI BẬT ==================== */}
-			<section
-				id="featured-products"
-				ref={productsReveal.ref}
-				className={`scroll-mt-20 transition-all duration-500 ease-out ${productsReveal.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-			>
+			<section id="featured-products" className="scroll-mt-20">
 				<div className="mb-6 flex items-center justify-between sm:mb-8">
 					<div>
 						<h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Sản phẩm nổi bật</h2>
