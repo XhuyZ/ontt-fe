@@ -20,6 +20,12 @@ export interface Product {
   images: ProductImage[]
 }
 
+export interface FetchProductsOptions {
+  random?: boolean
+  ids?: string[]
+  limit?: number
+}
+
 export const CATEGORY_MAP: Record<string, string> = {
   'Nhựa Nano': '9ea33d43-a9af-48f0-a9b9-f46f8b7cd2c3',
   'Tấm PVC': '0ae4ef5a-3152-4568-88dc-c3aeaf7f607a',
@@ -36,14 +42,33 @@ export function getDisplayCategoryName(name: string): string {
   return name
 }
 
-async function fetchAllProducts(): Promise<Product[]> {
-  const res = await fetch(`${API_BASE}/products`, { headers: { accept: '*/*' } })
+async function fetchAllProducts(options?: FetchProductsOptions): Promise<Product[]> {
+  const params = new URLSearchParams()
+  if (options?.random !== undefined) params.append('random', String(options.random))
+  if (options?.limit !== undefined) params.append('limit', String(options.limit))
+  if (options?.ids && options.ids.length > 0) params.append('ids', options.ids.join(','))
+
+  const qs = params.toString()
+  const url = `${API_BASE}/products${qs ? `?${qs}` : ''}`
+
+  const res = await fetch(url, { headers: { accept: '*/*' } })
   if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`)
   return res.json()
 }
 
-async function fetchProductsByCategory(categoryId: string): Promise<Product[]> {
-  const res = await fetch(`${API_BASE}/products/category/${categoryId}`, {
+async function fetchProductsByCategory(
+  categoryId: string,
+  options?: FetchProductsOptions,
+): Promise<Product[]> {
+  const params = new URLSearchParams()
+  if (options?.random !== undefined) params.append('random', String(options.random))
+  if (options?.limit !== undefined) params.append('limit', String(options.limit))
+  if (options?.ids && options.ids.length > 0) params.append('ids', options.ids.join(','))
+
+  const qs = params.toString()
+  const url = `${API_BASE}/products/category/${categoryId}${qs ? `?${qs}` : ''}`
+
+  const res = await fetch(url, {
     headers: { accept: '*/*' },
   })
   if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`)
@@ -67,10 +92,10 @@ async function fetchProductById(productId: string): Promise<Product | null> {
   }
 }
 
-export function useProducts(categoryId?: string) {
+export function useProducts(categoryId?: string, options?: FetchProductsOptions) {
   return useQuery<Product[]>({
-    queryKey: categoryId ? ['products', 'category', categoryId] : ['products'],
-    queryFn: () => (categoryId ? fetchProductsByCategory(categoryId) : fetchAllProducts()),
+    queryKey: categoryId ? ['products', 'category', categoryId, options] : ['products', options],
+    queryFn: () => (categoryId ? fetchProductsByCategory(categoryId, options) : fetchAllProducts(options)),
   })
 }
 

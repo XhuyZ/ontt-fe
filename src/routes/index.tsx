@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useRef } from 'react'
-import { useProducts } from '../hooks/useProducts'
+import { useProducts, type FetchProductsOptions } from '../hooks/useProducts'
 import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER } from '../hooks/useProjects'
 import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER, getDisplayCategoryName } from '../hooks/useProducts'
 import { VideoShortsSection } from '../components/VideoShortsSection'
@@ -112,8 +112,16 @@ function ProductCard({ product }: { product: Product }) {
 /* ------------------------------------------------------------------ */
 /*  Product category row                                               */
 /* ------------------------------------------------------------------ */
-function ProductCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
-	const { data: products, isLoading, isError, error } = useProducts(categoryId)
+function ProductCategoryRow({
+	categoryName,
+	categoryId,
+	options,
+}: {
+	categoryName: string
+	categoryId: string
+	options?: FetchProductsOptions
+}) {
+	const { data: products, isLoading, isError, error } = useProducts(categoryId, options)
 	const displayed = products ?? []
 
 	if (products) {
@@ -350,13 +358,33 @@ function HomePage() {
 				</div>
 
 				<div className="space-y-8 sm:space-y-10">
-					{PRODUCT_CATEGORY_ORDER.map((categoryName) => (
-						<ProductCategoryRow
-							key={categoryName}
-							categoryName={categoryName}
-							categoryId={CATEGORY_MAP[categoryName]}
-						/>
-					))}
+					{PRODUCT_CATEGORY_ORDER.map((categoryName) => {
+						let options: FetchProductsOptions | undefined
+						if (categoryName === 'Tấm PVC') {
+							options = {
+								random: false,
+								ids: [
+									'5c80ff6e-f163-4f68-ad53-8ac277e59a8d',
+									'03373255-bc17-4fd1-b83d-9dfc5166c747',
+									'cb3b6ea2-055e-4d6d-9100-b2045b5d5ef4',
+									'6bfaad13-9dfc-4366-b704-ffdc2025bf34',
+									'3782be77-2f05-450b-933c-4347ca196982',
+									'50844df2-0c03-4382-85a4-d0bc610c8967',
+								],
+							}
+						} else if (categoryName === 'Than tre') {
+							options = { random: true, limit: 6 }
+						}
+
+						return (
+							<ProductCategoryRow
+								key={categoryName}
+								categoryName={categoryName}
+								categoryId={CATEGORY_MAP[categoryName]}
+								options={options}
+							/>
+						)
+					})}
 				</div>
 			</section>
 
