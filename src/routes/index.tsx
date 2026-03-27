@@ -56,7 +56,7 @@ function SliderSkeleton() {
 		<>
 			{Array.from({ length: 6 }).map((_, i) => (
 				<div key={i} className="w-full overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
-					<div className="skeleton aspect-[4/3] w-full" />
+					<div className="skeleton aspect-square sm:aspect-[4/3] w-full" />
 					<div className="p-3 sm:p-4">
 						<div className="skeleton h-3.5 w-3/4 rounded" />
 						<div className="skeleton mt-2 h-3 w-1/2 rounded" />
@@ -83,7 +83,7 @@ function ProductCard({ product }: { product: Product }) {
 			<Link
 				to="/san-pham/$productId"
 				params={{ productId: product.id }}
-				className="group relative block aspect-[4/3] w-full overflow-hidden bg-slate-100"
+				className="group relative block aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-slate-100"
 			>
 				<img src={imgUrl} alt={product.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
 				<span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
@@ -147,7 +147,7 @@ function ProductCategoryRow({
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					<SliderSkeleton />
 				</div>
 			) : isError ? (
@@ -155,7 +155,7 @@ function ProductCategoryRow({
 					Không tải được sản phẩm. {error instanceof Error ? error.message : ''}
 				</p>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					{displayed.map((p) => (
 						<ProductCard key={p.id} product={p} />
 					))}
@@ -174,7 +174,7 @@ function ProjectCard({ project }: { project: Project }) {
 			<Link
 				to="/cong-trinh-da-thi-cong/$projectId"
 				params={{ projectId: project.id }}
-				className="group relative block aspect-[4/3] w-full overflow-hidden bg-slate-100"
+				className="group relative block aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-slate-100"
 			>
 				<img src={imgUrl} alt={project.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
 				<span className="absolute left-2 top-2 rounded-full bg-amber-900 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm sm:px-2.5 sm:text-xs">
@@ -228,11 +228,11 @@ function ProjectCategoryRow({
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					<SliderSkeleton />
 				</div>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
 					{displayed.map((p) => (
 						<ProjectCard key={p.id} project={p} />
 					))}
