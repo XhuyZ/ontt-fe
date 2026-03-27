@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useRef } from 'react'
 import { useProducts, type FetchProductsOptions } from '../hooks/useProducts'
-import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER } from '../hooks/useProjects'
+import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER, type FetchProjectsOptions } from '../hooks/useProjects'
 import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER, getDisplayCategoryName } from '../hooks/useProducts'
 import { VideoShortsSection } from '../components/VideoShortsSection'
 import type { Product } from '../hooks/useProducts'
@@ -203,8 +203,16 @@ function ProjectCard({ project }: { project: Project }) {
 /* ------------------------------------------------------------------ */
 /*  Project category row                                               */
 /* ------------------------------------------------------------------ */
-function ProjectCategoryRow({ categoryName, categoryId }: { categoryName: string; categoryId: string }) {
-	const { data: projects, isLoading } = useProjects(categoryId)
+function ProjectCategoryRow({
+	categoryName,
+	categoryId,
+	options,
+}: {
+	categoryName: string
+	categoryId: string
+	options?: FetchProjectsOptions
+}) {
+	const { data: projects, isLoading } = useProjects(categoryId, options)
 	const displayed = projects ?? []
 
 	return (
@@ -385,7 +393,17 @@ function HomePage() {
 								],
 							}
 						} else if (categoryName === 'Than tre') {
-							options = { random: true, limit: 6 }
+							options = {
+								random: false,
+								ids: [
+									'ff35e640-c7e3-4aed-83de-cd63d2e66956',
+									'0b5cc031-556c-4154-a831-e768f519adf0',
+									'6a64c21c-693b-4ef7-a0a7-a09f4dd8bcca',
+									'150f4034-c32a-4af5-8439-dfaf8719c2e7',
+									'0a668386-a293-4b40-a5d4-450920f2c450',
+									'e267042a-31d4-4eff-a8f8-16cb3bf25e5a',
+								],
+							}
 						}
 
 						return (
@@ -420,13 +438,53 @@ function HomePage() {
 				</div>
 
 				<div className="space-y-8 sm:space-y-10">
-					{PROJECT_CATEGORY_ORDER.map((categoryName) => (
-						<ProjectCategoryRow
-							key={categoryName}
-							categoryName={categoryName}
-							categoryId={PROJECT_CATEGORY_MAP[categoryName]}
-						/>
-					))}
+					{PROJECT_CATEGORY_ORDER.map((categoryName) => {
+						let options: FetchProjectsOptions | undefined
+						if (categoryName === 'Trần') {
+							options = {
+								ids: [
+									'7aa2fced-a70b-4ed1-b6aa-1c28e66ecf00',
+									'8a346c20-f36b-4bdc-af24-2a301848bac0',
+									'1c3315e1-ef15-41bc-929d-ba49149e8ec0',
+									'82351158-8bc8-4ffc-b4ff-adb92f996907',
+								],
+							}
+						} else if (categoryName === 'Phòng thờ') {
+							options = {
+								ids: [
+									'6b781fca-47cb-4bb8-bdc9-741b06a0f16b',
+									'd65979ba-8142-4f9f-80c6-af4cdfd2fc32',
+									'ac9b009a-115e-4cd4-8641-e5fd2bc133c9',
+									'45d226ff-0305-40b1-a047-7ea561dbc8d8',
+								],
+							}
+						} else if (categoryName === 'Phòng khách') {
+							options = {
+								ids: [
+									'4d470890-3c75-4666-908c-1b884685997e',
+									'baac09c6-503d-4b42-9fb2-ae2fa9404927',
+									'4fa8dcf4-f455-438c-a509-044a00390ec9',
+								],
+							}
+						} else if (categoryName === 'Vách TV') {
+							options = {
+								ids: [
+									'2c725251-e1ae-4261-a22c-f8ec15517ac4',
+									'596a5956-0c77-490d-8268-981058ebfb12',
+									'4c9b8c96-0523-45d4-aa78-783796d65f2f',
+								],
+							}
+						}
+
+						return (
+							<ProjectCategoryRow
+								key={categoryName}
+								categoryName={categoryName}
+								categoryId={PROJECT_CATEGORY_MAP[categoryName]}
+								options={options}
+							/>
+						)
+					})}
 				</div>
 			</section>
 

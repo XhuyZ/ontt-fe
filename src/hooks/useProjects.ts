@@ -20,6 +20,12 @@ export interface Project {
   images: ProjectImage[]
 }
 
+export interface FetchProjectsOptions {
+  random?: boolean
+  ids?: string[]
+  limit?: number
+}
+
 export const PROJECT_CATEGORY_MAP: Record<string, string> = {
   'Trần': '66f78ef9-14ec-429a-9f17-eb2d7f05e25f',
   'Phòng thờ': '7907a2d0-c5a2-4d2a-ac2d-2680365f50e2',
@@ -29,14 +35,33 @@ export const PROJECT_CATEGORY_MAP: Record<string, string> = {
 
 export const PROJECT_CATEGORY_ORDER: string[] = ['Trần', 'Phòng thờ', 'Phòng khách', 'Vách TV']
 
-async function fetchAllProjects(): Promise<Project[]> {
-  const res = await fetch(`${API_BASE}/project`, { headers: { accept: '*/*' } })
+async function fetchAllProjects(options?: FetchProjectsOptions): Promise<Project[]> {
+  const params = new URLSearchParams()
+  if (options?.random !== undefined) params.append('random', String(options.random))
+  if (options?.limit !== undefined) params.append('limit', String(options.limit))
+  if (options?.ids && options.ids.length > 0) params.append('ids', options.ids.join(','))
+
+  const qs = params.toString()
+  const url = `${API_BASE}/project${qs ? `?${qs}` : ''}`
+
+  const res = await fetch(url, { headers: { accept: '*/*' } })
   if (!res.ok) throw new Error(`Failed to fetch projects: ${res.status}`)
   return res.json()
 }
 
-async function fetchProjectsByCategory(categoryId: string): Promise<Project[]> {
-  const res = await fetch(`${API_BASE}/project/category/${categoryId}`, {
+async function fetchProjectsByCategory(
+  categoryId: string,
+  options?: FetchProjectsOptions,
+): Promise<Project[]> {
+  const params = new URLSearchParams()
+  if (options?.random !== undefined) params.append('random', String(options.random))
+  if (options?.limit !== undefined) params.append('limit', String(options.limit))
+  if (options?.ids && options.ids.length > 0) params.append('ids', options.ids.join(','))
+
+  const qs = params.toString()
+  const url = `${API_BASE}/project/category/${categoryId}${qs ? `?${qs}` : ''}`
+
+  const res = await fetch(url, {
     headers: { accept: '*/*' },
   })
   if (!res.ok) throw new Error(`Failed to fetch projects: ${res.status}`)
@@ -59,10 +84,10 @@ async function fetchProjectById(projectId: string): Promise<Project | null> {
   }
 }
 
-export function useProjects(categoryId?: string) {
+export function useProjects(categoryId?: string, options?: FetchProjectsOptions) {
   return useQuery<Project[]>({
-    queryKey: categoryId ? ['projects', 'category', categoryId] : ['projects'],
-    queryFn: () => (categoryId ? fetchProjectsByCategory(categoryId) : fetchAllProjects()),
+    queryKey: categoryId ? ['projects', 'category', categoryId, options] : ['projects', options],
+    queryFn: () => (categoryId ? fetchProjectsByCategory(categoryId, options) : fetchAllProjects(options)),
   })
 }
 
