@@ -372,6 +372,18 @@ function HomePage() {
 									'50844df2-0c03-4382-85a4-d0bc610c8967',
 								],
 							}
+						} else if (categoryName === 'Lam sóng') {
+							options = {
+								random: false,
+								ids: [
+									'dee7356a-54cc-4af0-8927-620b6d562894',
+									'f8f01139-739b-4fb2-b87e-c6a9d9968c4b',
+									'6469014d-0d76-4fc0-b478-74db5af1f604',
+									'0f5c8c00-c6f2-4c51-8d2d-245c9e103229',
+									'135f7000-8042-4ea8-b576-d25a6f7824e7',
+									'1730f7e1-82a4-46bf-8705-19fc90b0c1ad',
+								],
+							}
 						} else if (categoryName === 'Than tre') {
 							options = { random: true, limit: 6 }
 						}
