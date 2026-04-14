@@ -55,7 +55,10 @@ function RootLayout() {
 				<div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
 					<Link to="/" search={{ scrollTo: undefined }} onClick={closeAll} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
 						<img src="/Logo.png" alt="Logo Ốp Nhựa Tuấn Kiệt" className="h-11 w-11 object-contain md:h-12 md:w-12" />
-						<h1 className="text-base font-semibold tracking-wide text-amber-950 md:text-lg">Ốp Nhựa Tuấn Kiệt</h1>
+						<div className="leading-tight">
+							<h1 className="text-base font-semibold tracking-wide text-amber-950 md:text-lg">Ốp Nhựa Tuấn Kiệt</h1>
+							<p className="text-[11px] font-medium text-amber-900/90 md:text-xs">0347 916 199</p>
+						</div>
 					</Link>
 
 					{/* Hamburger button - mobile only */}
@@ -261,9 +264,10 @@ function RootLayout() {
 					href={`tel:${phoneNumber}`}
 					aria-label="Điện thoại"
 					title="Điện thoại"
-					className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105 md:h-14 md:w-14"
+					className="group relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-amber-300/90 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-14 md:w-14"
 				>
-					<span className="absolute h-12 w-12 rounded-full bg-amber-400/20 animate-pulse md:h-14 md:w-14" />
+					<span className="absolute h-12 w-12 rounded-full bg-amber-400/35 animate-ping md:h-14 md:w-14" />
+					<span className="absolute h-12 w-12 rounded-full border-2 border-amber-300/80 animate-pulse md:h-14 md:w-14" />
 					<img src="/phone-logo.png" alt="Điện thoại" className="relative z-10 h-6 w-6 object-contain md:h-7 md:w-7" />
 				</a>
 				<a
@@ -272,9 +276,10 @@ function RootLayout() {
 					rel="noreferrer"
 					aria-label="Liên hệ Zalo"
 					title="Liên hệ Zalo"
-					className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_10px_25px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:scale-105 md:h-14 md:w-14"
+					className="group relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-sky-300/90 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-14 md:w-14"
 				>
-					<span className="absolute h-12 w-12 rounded-full bg-sky-400/20 animate-pulse [animation-delay:150ms] md:h-14 md:w-14" />
+					<span className="absolute h-12 w-12 rounded-full bg-sky-400/35 animate-ping [animation-delay:150ms] md:h-14 md:w-14" />
+					<span className="absolute h-12 w-12 rounded-full border-2 border-sky-300/80 animate-pulse [animation-delay:300ms] md:h-14 md:w-14" />
 					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-7 w-7 object-contain md:h-8 md:w-8" />
 				</a>
 			</div>

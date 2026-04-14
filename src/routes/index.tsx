@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useRef } from 'react'
 import { useProducts, type FetchProductsOptions } from '../hooks/useProducts'
-import { useProjects, PROJECT_CATEGORY_MAP, PROJECT_CATEGORY_ORDER, type FetchProjectsOptions } from '../hooks/useProjects'
+import { useProjects, PROJECT_CATEGORY_ORDER } from '../hooks/useProjects'
 import { CATEGORY_MAP, PRODUCT_CATEGORY_ORDER, getDisplayCategoryName } from '../hooks/useProducts'
 import { VideoShortsSection } from '../components/VideoShortsSection'
 import type { Product } from '../hooks/useProducts'
@@ -124,20 +124,10 @@ function ProductCategoryRow({
 	const { data: products, isLoading, isError, error } = useProducts(categoryId, options)
 	const displayed = products ?? []
 
-	if (products) {
-		// Debug: log số lượng sản phẩm theo phân loại trên trang chủ
-		console.log('[Home] Products for category', categoryName, '(', categoryId, '):', products.length)
-	}
-
 	return (
 		<div className="space-y-3">
 			<div className="flex items-center justify-between">
-				<h3 className="text-base font-bold text-slate-800 sm:text-lg">
-					{categoryName}
-					{products && (
-						<span className="ml-2 text-xs font-normal text-slate-500">({products.length} sản phẩm)</span>
-					)}
-				</h3>
+				<h3 className="text-base font-bold text-slate-800 sm:text-lg">{categoryName}</h3>
 				<Link
 					to="/san-pham"
 					search={{ categoryId, categoryName }}
@@ -200,46 +190,52 @@ function ProjectCard({ project }: { project: Project }) {
 	)
 }
 
-/* ------------------------------------------------------------------ */
-/*  Project category row                                               */
-/* ------------------------------------------------------------------ */
-function ProjectCategoryRow({
-	categoryName,
-	categoryId,
-	options,
-}: {
-	categoryName: string
-	categoryId: string
-	options?: FetchProjectsOptions
-}) {
-	const { data: projects, isLoading } = useProjects(categoryId, options)
-	const displayed = projects ?? []
+const HOME_PROJECT_ORDERED_IDS = [
+	'7aa2fced-a70b-4ed1-b6aa-1c28e66ecf00',
+	'8a346c20-f36b-4bdc-af24-2a301848bac0',
+	'1c3315e1-ef15-41bc-929d-ba49149e8ec0',
+	'82351158-8bc8-4ffc-b4ff-adb92f996907',
+	'6b781fca-47cb-4bb8-bdc9-741b06a0f16b',
+	'd65979ba-8142-4f9f-80c6-af4cdfd2fc32',
+	'ac9b009a-115e-4cd4-8641-e5fd2bc133c9',
+	'45d226ff-0305-40b1-a047-7ea561dbc8d8',
+	'4d470890-3c75-4666-908c-1b884685997e',
+	'baac09c6-503d-4b42-9fb2-ae2fa9404927',
+	'4fa8dcf4-f455-438c-a509-044a00390ec9',
+	'2c725251-e1ae-4261-a22c-f8ec15517ac4',
+	'596a5956-0c77-490d-8268-981058ebfb12',
+	'4c9b8c96-0523-45d4-aa78-783796d65f2f',
+]
+
+function CombinedProjectsRow() {
+	const { data: projects, isLoading } = useProjects(undefined, { ids: HOME_PROJECT_ORDERED_IDS, random: false })
+	const indexById = new Map(HOME_PROJECT_ORDERED_IDS.map((id, idx) => [id, idx]))
+	const displayed = (projects ?? []).slice().sort((a, b) => {
+		const aIdx = indexById.get(a.id)
+		const bIdx = indexById.get(b.id)
+		if (aIdx !== undefined && bIdx !== undefined) return aIdx - bIdx
+		const catA = PROJECT_CATEGORY_ORDER.indexOf(a.projectCategory.name)
+		const catB = PROJECT_CATEGORY_ORDER.indexOf(b.projectCategory.name)
+		return (catA === -1 ? 999 : catA) - (catB === -1 ? 999 : catB)
+	})
+
+	if (isLoading) {
+		return (
+			<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<SliderSkeleton />
+			</div>
+		)
+	}
+
+	if (displayed.length === 0) {
+		return <p className="py-4 text-center text-sm text-slate-400">Chưa có công trình.</p>
+	}
 
 	return (
-		<div className="space-y-3">
-			<div className="flex items-center justify-between">
-				<h3 className="text-base font-bold text-slate-800 sm:text-lg">{categoryName}</h3>
-				<Link
-					to="/cong-trinh-da-thi-cong"
-					search={{ categoryId, categoryName }}
-					className="text-xs font-medium text-amber-950 transition-colors hover:text-amber-950 sm:text-sm"
-				>
-					Xem thêm →
-				</Link>
-			</div>
-			{isLoading ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
-					<SliderSkeleton />
-				</div>
-			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
-					{displayed.map((p) => (
-						<ProjectCard key={p.id} project={p} />
-					))}
-				</div>
-			) : (
-				<p className="py-4 text-center text-sm text-slate-400">Chưa có công trình trong danh mục này.</p>
-			)}
+		<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+			{displayed.map((p) => (
+				<ProjectCard key={p.id} project={p} />
+			))}
 		</div>
 	)
 }
@@ -349,7 +345,28 @@ function HomePage() {
 				</div>
 			</section>
 
-			{/* ==================== FRAME 2 — SẢN PHẨM NỔI BẬT ==================== */}
+			{/* ==================== FRAME 2 — CÔNG TRÌNH THI CÔNG ==================== */}
+			<section
+				ref={projectsReveal.ref}
+				className={`transition-all duration-500 ease-out ${projectsReveal.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+			>
+				<div className="mb-6 flex items-center justify-between sm:mb-8">
+					<div>
+						<h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Công trình thi công</h2>
+						<p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Hiển thị chung theo đúng thứ tự hiện tại</p>
+					</div>
+					<Link
+						to="/cong-trinh-da-thi-cong"
+						search={{ categoryId: undefined, categoryName: undefined }}
+						className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-amber-950 transition-colors hover:bg-stone-100 sm:text-sm"
+					>
+						Xem tất cả
+					</Link>
+				</div>
+				<CombinedProjectsRow />
+			</section>
+
+			{/* ==================== FRAME 3 — SẢN PHẨM NỔI BẬT ==================== */}
 			<section id="featured-products" className="scroll-mt-20">
 				<div className="mb-6 flex items-center justify-between sm:mb-8">
 					<div>
@@ -411,76 +428,6 @@ function HomePage() {
 								key={categoryName}
 								categoryName={categoryName}
 								categoryId={CATEGORY_MAP[categoryName]}
-								options={options}
-							/>
-						)
-					})}
-				</div>
-			</section>
-
-			{/* ==================== FRAME 3 — CÔNG TRÌNH THI CÔNG ==================== */}
-			<section
-				ref={projectsReveal.ref}
-				className={`transition-all duration-500 ease-out ${projectsReveal.visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-			>
-				<div className="mb-6 flex items-center justify-between sm:mb-8">
-					<div>
-						<h2 className="text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">Công trình đã thi công</h2>
-						<p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Các công trình theo phân loại</p>
-					</div>
-					<Link
-						to="/cong-trinh-da-thi-cong"
-						search={{ categoryId: undefined, categoryName: undefined }}
-						className="rounded-full border border-stone-300 bg-stone-50 px-4 py-1.5 text-xs font-medium text-amber-950 transition-colors hover:bg-stone-100 sm:text-sm"
-					>
-						Xem tất cả
-					</Link>
-				</div>
-
-				<div className="space-y-8 sm:space-y-10">
-					{PROJECT_CATEGORY_ORDER.map((categoryName) => {
-						let options: FetchProjectsOptions | undefined
-						if (categoryName === 'Trần') {
-							options = {
-								ids: [
-									'7aa2fced-a70b-4ed1-b6aa-1c28e66ecf00',
-									'8a346c20-f36b-4bdc-af24-2a301848bac0',
-									'1c3315e1-ef15-41bc-929d-ba49149e8ec0',
-									'82351158-8bc8-4ffc-b4ff-adb92f996907',
-								],
-							}
-						} else if (categoryName === 'Phòng thờ') {
-							options = {
-								ids: [
-									'6b781fca-47cb-4bb8-bdc9-741b06a0f16b',
-									'd65979ba-8142-4f9f-80c6-af4cdfd2fc32',
-									'ac9b009a-115e-4cd4-8641-e5fd2bc133c9',
-									'45d226ff-0305-40b1-a047-7ea561dbc8d8',
-								],
-							}
-						} else if (categoryName === 'Phòng khách') {
-							options = {
-								ids: [
-									'4d470890-3c75-4666-908c-1b884685997e',
-									'baac09c6-503d-4b42-9fb2-ae2fa9404927',
-									'4fa8dcf4-f455-438c-a509-044a00390ec9',
-								],
-							}
-						} else if (categoryName === 'Vách TV') {
-							options = {
-								ids: [
-									'2c725251-e1ae-4261-a22c-f8ec15517ac4',
-									'596a5956-0c77-490d-8268-981058ebfb12',
-									'4c9b8c96-0523-45d4-aa78-783796d65f2f',
-								],
-							}
-						}
-
-						return (
-							<ProjectCategoryRow
-								key={categoryName}
-								categoryName={categoryName}
-								categoryId={PROJECT_CATEGORY_MAP[categoryName]}
 								options={options}
 							/>
 						)
