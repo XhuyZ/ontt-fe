@@ -293,13 +293,13 @@ function HomePage() {
 						Chuyên cung cấp và thi công tấm ốp nhựa cho nhà ở, cửa hàng và công trình.
 					</p>
 					<div
-						className={`mt-4 space-y-1 text-xs text-amber-100/80 transition-all duration-700 delay-200 sm:text-sm ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+						className={`mt-4 space-y-1.5 text-base text-amber-100/95 transition-all duration-700 delay-200 sm:text-lg md:text-xl ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
 					>
 						<p>
-							<span className="font-semibold text-white">Số điện thoại:</span> 0347 916 199
+							<span className="font-bold text-white">Số điện thoại:</span> 0347 916 199
 						</p>
 						<p>
-							<span className="font-semibold text-white">Email:</span> opnhuatuankiet@mail.com
+							<span className="font-bold text-white">Email:</span> opnhuatuankiet@mail.com
 						</p>
 					</div>
 

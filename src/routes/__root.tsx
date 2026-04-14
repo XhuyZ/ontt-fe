@@ -54,10 +54,10 @@ function RootLayout() {
 			<header className="sticky top-0 z-30 border-b border-amber-200/80 bg-amber-50/95 backdrop-blur">
 				<div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
 					<Link to="/" search={{ scrollTo: undefined }} onClick={closeAll} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-						<img src="/Logo.png" alt="Logo Ốp Nhựa Tuấn Kiệt" className="h-11 w-11 object-contain md:h-12 md:w-12" />
+						<img src="/Logo.png" alt="Logo Ốp Nhựa Tuấn Kiệt" className="h-12 w-12 object-contain md:h-14 md:w-14" />
 						<div className="leading-tight">
-							<h1 className="text-base font-semibold tracking-wide text-amber-950 md:text-lg">Ốp Nhựa Tuấn Kiệt</h1>
-							<p className="text-[11px] font-medium text-amber-900/90 md:text-xs">0347 916 199</p>
+							<h1 className="text-lg font-bold tracking-wide text-amber-950 md:text-2xl">Ốp Nhựa Tuấn Kiệt</h1>
+							<p className="text-sm font-semibold text-amber-900/95 md:text-base">0347 916 199</p>
 						</div>
 					</Link>
 
@@ -259,16 +259,17 @@ function RootLayout() {
 				</svg>
 			</button>
 
-			<div className="fixed bottom-4 right-3 z-20 flex flex-col gap-2.5 md:bottom-5 md:right-4 md:gap-3">
+			<div className="fixed bottom-4 right-3 z-20 flex flex-col gap-3 md:bottom-5 md:right-4 md:gap-4">
 				<a
 					href={`tel:${phoneNumber}`}
 					aria-label="Điện thoại"
 					title="Điện thoại"
-					className="group relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-amber-300/90 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-14 md:w-14"
+					className="group relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-amber-200 bg-gradient-to-br from-yellow-200 via-amber-300 to-orange-400 shadow-[0_14px_35px_rgba(245,158,11,0.55)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-20 md:w-20"
 				>
-					<span className="absolute h-12 w-12 rounded-full bg-amber-400/35 animate-ping md:h-14 md:w-14" />
-					<span className="absolute h-12 w-12 rounded-full border-2 border-amber-300/80 animate-pulse md:h-14 md:w-14" />
-					<img src="/phone-logo.png" alt="Điện thoại" className="relative z-10 h-6 w-6 object-contain md:h-7 md:w-7" />
+					<span className="absolute h-16 w-16 rounded-full bg-amber-300/45 animate-ping md:h-20 md:w-20" />
+					<span className="absolute h-16 w-16 rounded-full border-2 border-yellow-100/90 animate-pulse md:h-20 md:w-20" />
+					<span className="absolute h-16 w-16 rounded-full border-4 border-orange-300/60 animate-pulse [animation-delay:200ms] md:h-20 md:w-20" />
+					<img src="/phone-logo.png" alt="Điện thoại" className="relative z-10 h-9 w-9 object-contain md:h-11 md:w-11" />
 				</a>
 				<a
 					href={`https://zalo.me/${phoneNumber}`}
@@ -276,11 +277,12 @@ function RootLayout() {
 					rel="noreferrer"
 					aria-label="Liên hệ Zalo"
 					title="Liên hệ Zalo"
-					className="group relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-sky-300/90 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-14 md:w-14"
+					className="group relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan-200 bg-gradient-to-br from-cyan-200 via-sky-300 to-blue-500 shadow-[0_14px_35px_rgba(14,165,233,0.55)] transition duration-300 hover:-translate-y-1 hover:scale-110 md:h-20 md:w-20"
 				>
-					<span className="absolute h-12 w-12 rounded-full bg-sky-400/35 animate-ping [animation-delay:150ms] md:h-14 md:w-14" />
-					<span className="absolute h-12 w-12 rounded-full border-2 border-sky-300/80 animate-pulse [animation-delay:300ms] md:h-14 md:w-14" />
-					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-7 w-7 object-contain md:h-8 md:w-8" />
+					<span className="absolute h-16 w-16 rounded-full bg-sky-300/45 animate-ping [animation-delay:150ms] md:h-20 md:w-20" />
+					<span className="absolute h-16 w-16 rounded-full border-2 border-cyan-100/90 animate-pulse [animation-delay:300ms] md:h-20 md:w-20" />
+					<span className="absolute h-16 w-16 rounded-full border-4 border-blue-300/60 animate-pulse [animation-delay:450ms] md:h-20 md:w-20" />
+					<img src="/zalo-logo.png" alt="Liên hệ Zalo" className="relative z-10 h-10 w-10 object-contain md:h-12 md:w-12" />
 				</a>
 			</div>
 		</div>
