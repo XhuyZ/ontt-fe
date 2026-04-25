@@ -299,7 +299,7 @@ function HomePage() {
 							<span className="font-bold text-white">Số điện thoại:</span> 0347 916 199
 						</p>
 						<p>
-							<span className="font-bold text-white">Email:</span> opnhuatuankiet@mail.com
+							<span className="font-bold text-white">Email:</span> opnhuatuankiet@gmail.com
 						</p>
 					</div>
 
