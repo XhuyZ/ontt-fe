@@ -28,12 +28,12 @@ export interface FetchProjectsOptions {
 
 export const PROJECT_CATEGORY_MAP: Record<string, string> = {
   'Trần': '66f78ef9-14ec-429a-9f17-eb2d7f05e25f',
-  'Phòng thờ': '7907a2d0-c5a2-4d2a-ac2d-2680365f50e2',
+  'Phòng Thờ': '7907a2d0-c5a2-4d2a-ac2d-2680365f50e2',
   'Phòng khách': '01338b05-735e-4fc5-b52d-46d7eb6fd26e',
-  'Vách TV': '8cfbba31-c74b-4224-b0f2-3b5f8176ce76',
+  'Lam sóng PVC vách TV': '8cfbba31-c74b-4224-b0f2-3b5f8176ce76',
 }
 
-export const PROJECT_CATEGORY_ORDER: string[] = ['Trần', 'Phòng thờ', 'Phòng khách', 'Vách TV']
+export const PROJECT_CATEGORY_ORDER: string[] = ['Trần', 'Phòng Thờ', 'Phòng khách', 'Lam sóng PVC vách TV']
 
 async function fetchAllProjects(options?: FetchProjectsOptions): Promise<Project[]> {
   const params = new URLSearchParams()
