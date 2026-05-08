@@ -9,6 +9,7 @@ import type { Project } from '../hooks/useProjects'
 
 const heroImages = ['/heropic1.jpg', '/heropic2.jpg', '/heropic3.jpg', '/heropic4.jpg']
 const PLACEHOLDER_IMG = 'https://placehold.co/400x300/f5f5f4/a8a29e?text=No+Image'
+const HOME_CATEGORY_ITEM_LIMIT = 6
 
 const commitments = [
 	'Thi công nhanh chóng, độ hoàn thiện cao',
@@ -137,7 +138,7 @@ function ProductCategoryRow({
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
 					<SliderSkeleton />
 				</div>
 			) : isError ? (
@@ -145,7 +146,7 @@ function ProductCategoryRow({
 					Không tải được sản phẩm. {error instanceof Error ? error.message : ''}
 				</p>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
 					{displayed.map((p) => (
 						<ProductCard key={p.id} product={p} />
 					))}
@@ -201,7 +202,7 @@ function ProjectCategoryRow({
 	categoryName: string
 	categoryId: string
 }) {
-	const { data: projects, isLoading } = useProjects(categoryId, { limit: 5 })
+	const { data: projects, isLoading } = useProjects(categoryId, { limit: HOME_CATEGORY_ITEM_LIMIT })
 	const displayed = projects ?? []
 
 	return (
@@ -217,11 +218,11 @@ function ProjectCategoryRow({
 				</Link>
 			</div>
 			{isLoading ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
 					<SliderSkeleton />
 				</div>
 			) : displayed.length > 0 ? (
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
 					{displayed.map((p) => (
 						<ProjectCard key={p.id} project={p} />
 					))}
@@ -389,7 +390,7 @@ function HomePage() {
 							key={categoryName}
 							categoryName={categoryName}
 							categoryId={CATEGORY_MAP[categoryName]}
-							options={{ limit: 5 }}
+							options={categoryName === 'Nhựa Nano' ? undefined : { limit: HOME_CATEGORY_ITEM_LIMIT }}
 						/>
 					))}
 				</div>
