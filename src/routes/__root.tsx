@@ -241,7 +241,10 @@ function RootLayout() {
 						Số 531 Âu Cơ , Tây Hồ ,
 					</p>
 					<p className="text-xs text-amber-900/90 sm:text-sm">
-						HN LK N07-23 HimLam News , Ngõ 24 Lý Sơn , Long Biên Hà Nội
+						HN LK N07-23 HimLam News , Ngõ 24 Lý Sơn , Long Biên Hà Nội,
+					</p>
+					<p className="text-xs text-amber-900/90 sm:text-sm">
+						176 Nguyễn Ái Quốc phường Trảng Dài tỉnh Đồng Nai
 					</p>
 				</div>
 			</footer>
